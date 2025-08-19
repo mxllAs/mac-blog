@@ -1,3 +1,9 @@
 <template>
-  <div>111</div>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>
+
+<script setup></script>
+
+<style scoped></style>

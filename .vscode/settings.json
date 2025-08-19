@@ -1,0 +1,22 @@
+{
+  "tailwindCSS.includeLanguages": {
+    "vue": "html",
+    "vue-html": "html"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["class:\\s*?[\"\']([^\"\']*).*?\"", "[\"\']([^\"\']*).*?\""],
+    ["(?:enter|leave)(?:From|To)?Class(?:Name)?\\s*[:=]\\s*[\"\']([^\"\']*)\""]
+  ],
+  "tailwindCSS.validate": true,
+  "tailwindCSS.lint.cssConflict": "warning",
+  "tailwindCSS.lint.invalidApply": "error",
+  "tailwindCSS.lint.invalidConfigPath": "error",
+  "tailwindCSS.lint.invalidScreen": "error",
+  "tailwindCSS.lint.invalidTailwindDirective": "error",
+  "tailwindCSS.lint.invalidVariant": "error",
+  "tailwindCSS.lint.recommendedVariantOrder": "warning",
+  "css.validate": false,
+  "editor.quickSuggestions": {
+    "strings": true
+  }
+}
