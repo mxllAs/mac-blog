@@ -17,7 +17,7 @@
       <img src="@/assets/svg/toggle.svg" class="cursor-pointer" alt="toggle-svg" />
       <!-- 时间显示 -->
       <div class="text-sm font-medium">
-        {{ currentTime }}
+        {{ isClient ? currentTime : '' }}
       </div>
     </div>
   </div>
@@ -28,6 +28,7 @@ import dayjs from "dayjs";
 import { ref, onMounted, onUnmounted } from "vue";
 // 当前时间
 const currentTime = ref("");
+const isClient = ref(false);
 let timer: NodeJS.Timeout | null = null;
 // 更新时间
 const updateTime = () => {
@@ -35,6 +36,7 @@ const updateTime = () => {
 };
 // 组件挂载时启动定时器
 onMounted(() => {
+  isClient.value = true; // 标记为客户端
   updateTime(); // 立即更新一次
   timer = setInterval(updateTime, 1000); // 每秒更新
 });
