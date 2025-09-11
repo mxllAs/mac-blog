@@ -1,11 +1,11 @@
 <template>
-  <!-- MacOS Hello 加载动画 -->
-  <MacOSHelloAnimation />
-  <!-- 窗口容器 -->
-  <WindowContainer />
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
+  <div>
+    <!-- MacOS Hello 加载动画 -->
+    <!-- <MacOSHelloAnimation /> -->
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
+  </div>
 </template>
 
 <script setup>

@@ -11,7 +11,7 @@
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <NuxtLink 
-            to="/about"
+            to="/"
             class="block p-4 bg-blue-50 hover:bg-blue-100 rounded-lg border border-blue-200 transition-colors group"
           >
             <div class="flex items-center mb-2">
@@ -26,7 +26,7 @@
           </NuxtLink>
           
           <NuxtLink 
-            to="/settings"
+            to="/"
             class="block p-4 bg-green-50 hover:bg-green-100 rounded-lg border border-green-200 transition-colors group"
           >
             <div class="flex items-center mb-2">

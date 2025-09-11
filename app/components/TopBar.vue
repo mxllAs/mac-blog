@@ -9,8 +9,6 @@
       <!-- 应用菜单显示地方 -->
       <div></div>
     </div>
-
-
     <div class="flex items-center space-x-5">
       <img src="@/assets/svg/battery.svg" alt="battery-svg" />
       <img src="@/assets/svg/wifi.svg" alt="wifi-svg" />
@@ -23,13 +21,13 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import dayjs from "dayjs";
 import { ref, onMounted, onUnmounted } from "vue";
 // 当前时间
 const currentTime = ref("");
 const isClient = ref(false);
-let timer: NodeJS.Timeout | null = null;
+let timer = null;
 // 更新时间
 const updateTime = () => {
   currentTime.value = dayjs().format("MM月DD日 HH:mm");
