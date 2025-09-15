@@ -42,7 +42,9 @@
             />
           </div>
         </div>
-        <MacModal v-model="open" title="设置"></MacModal>
+        <MacModal v-model="open" title="设置">
+          <Seting />
+        </MacModal>
       </div>
     </div>
   </div>
@@ -50,6 +52,7 @@
 
 <script setup>
 import MacModal from "@/components/MacModal.vue";
+import Seting from "@/components/seting/index.vue";
 const open = ref(false);
 const openSettings = () => {
   open.value = true;
