@@ -1,7 +1,6 @@
 <template>
-  <div class="p-8">
+  <div class="p-8 hidden">
     <h1 class="text-3xl font-bold mb-8 text-center">MacOS 风格博客系统</h1>
-    
     <div class="max-w-2xl mx-auto">
       <div class="bg-white/80 backdrop-blur-sm rounded-lg p-6 shadow-lg">
         <h2 class="text-xl font-semibold mb-4">欢迎使用</h2>
@@ -52,6 +51,6 @@
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script setup></script>
 
 <style></style>
