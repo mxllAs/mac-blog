@@ -1,8 +1,10 @@
 // store/index.js
 import { useStorage } from "@vueuse/core";
+import { useRuntimeConfig } from '#app';
 export const useSetingStore = () => {
+  const config = useRuntimeConfig();
   const imageStore = useStorage("imageStore", {
-    action: "/images/bg2.webp",
+    action: config.public.defaultBgImage,
     list: [
       "/images/bg1.webp",
       "/images/bg2.webp",
@@ -15,13 +17,12 @@ export const useSetingStore = () => {
   const updateSelectedImage = (imagePath) => {
     if (imageStore.value && imagePath) {
       imageStore.value.action = imagePath;
-      console.log("背景图片已更新为:", imagePath);
     }
   };
 
   // 获取当前选中的图片
   const getCurrentImage = () => {
-    return imageStore.value?.action || "/images/bg1.webp";
+    return imageStore.value?.action || config.public.defaultBgImage;
   };
 
   // 获取图片列表

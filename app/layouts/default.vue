@@ -18,19 +18,29 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { useSetingStore } from "~/store/index";
+import { useSetingStore } from "~/store/seting.js";
+const config = useRuntimeConfig();
 const setingStore = useSetingStore();
-// 使用 computed 来响应式地获取背景样式
-const backgroundStyle = computed(() => {
-  const imageUrl = setingStore.imageStore.value?.action || "/images/bg2.webp";
-  return {
-    backgroundImage: `url(${imageUrl})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center'
-  };
+const stopWatch = watch(
+  () => setingStore.imageStore.value?.action,
+  (newVal) => {
+    if (newVal) {
+      backgroundStyle.value.backgroundImage = `url(${newVal})`;
+    }
+  }
+);
+const backgroundStyle = ref({
+  backgroundImage: `url(${config.public.defaultBgImage})`,
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+});
+onMounted(() => {
+  const imageUrl = setingStore.imageStore.value?.action || config.public.defaultBgImage;
+  backgroundStyle.value.backgroundImage = `url(${imageUrl})`;
+});
+onUnmounted(() => {
+  stopWatch();
 });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

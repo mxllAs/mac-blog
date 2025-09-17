@@ -102,7 +102,7 @@
 
 <script setup>
 import { computed } from "vue";
-import { useSetingStore } from "~/store/index";
+import { useSetingStore } from "~/store/seting.js";
 
 const setingStore = useSetingStore();
 

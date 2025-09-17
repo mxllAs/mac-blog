@@ -73,7 +73,7 @@ onMounted(() => {
   // 1秒后开始进度条动画
   setTimeout(() => {
     startProgressAnimation();
-  }, 1500);
+  }, 1000);
 });
 </script>
 

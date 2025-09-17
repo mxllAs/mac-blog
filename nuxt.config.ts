@@ -7,8 +7,12 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "@ant-design-vue/nuxt",
     "@vueuse/nuxt",
+    "@pinia/nuxt",
   ],
-  devServer: {
-    port: 3050,
-  },
+  runtimeConfig:{
+    public:{
+      version: "",
+      defaultBgImage: ""
+    }
+  }
 });

@@ -13,7 +13,7 @@
         </li>
       </ul>
     </div>
-    <div class="pl-[15px] flex-1">
+    <div class="pl-[15px] flex-1 h-[432px]">
       <transition name="fade" mode="out-in">
         <component :is="settingContentComponent" :key="activeKey" />
       </transition>
