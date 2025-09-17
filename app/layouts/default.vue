@@ -1,6 +1,9 @@
 <template>
   <div class="w-full flex h-screen bg-[#e5e5e5] p-2">
-    <main class="w-full bg-[#fff] rounded-md shadow-md overflow-auto relative">
+    <main
+      class="w-full bg-[#fff] rounded-md shadow-md overflow-auto relative"
+      :style="backgroundStyle"
+    >
       <header class="h-[42px]">
         <TopBar />
       </header>
@@ -14,12 +17,20 @@
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script setup>
+import { computed } from "vue";
+import { useSetingStore } from "~/store/index";
+const setingStore = useSetingStore();
+// 使用 computed 来响应式地获取背景样式
+const backgroundStyle = computed(() => {
+  const imageUrl = setingStore.imageStore.value?.action || "/images/bg2.webp";
+  return {
+    backgroundImage: `url(${imageUrl})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center'
+  };
+});
+</script>
 
 <style scoped>
-main {
-  background-image: url("@/assets/images/bg2.webp");
-  background-size: cover;
-  background-position: center;
-}
 </style>
