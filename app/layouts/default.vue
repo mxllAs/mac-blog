@@ -18,11 +18,13 @@
 </template>
 
 <script setup>
-import { useSetingStore } from "~/store/seting.js";
 const config = useRuntimeConfig();
-const setingStore = useSetingStore();
+const actionCookie = useCookie("blog_bg_image", {
+  default: () => config.public.defaultBgImage,
+  maxAge: 60 * 60 * 24 * 30, // 30 天有效期
+});
 const stopWatch = watch(
-  () => setingStore.imageStore.value?.action,
+  () => actionCookie.value,
   (newVal) => {
     if (newVal) {
       backgroundStyle.value.backgroundImage = `url(${newVal})`;
@@ -30,13 +32,9 @@ const stopWatch = watch(
   }
 );
 const backgroundStyle = ref({
-  backgroundImage: `url(${config.public.defaultBgImage})`,
+  backgroundImage: `url(${actionCookie.value})`,
   backgroundSize: "cover",
   backgroundPosition: "center",
-});
-onMounted(() => {
-  const imageUrl = setingStore.imageStore.value?.action || config.public.defaultBgImage;
-  backgroundStyle.value.backgroundImage = `url(${imageUrl})`;
 });
 onUnmounted(() => {
   stopWatch();

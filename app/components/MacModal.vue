@@ -8,6 +8,8 @@
       :body-style="bodyStyle"
       :mask-style="maskStyle"
       wrapClassName="mac-modal-wrapper"
+      :maskClosable="false"
+      :destroyOnClose="true"
     >
       <template #title>
         <div

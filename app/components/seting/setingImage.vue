@@ -81,7 +81,7 @@
     </div>
 
     <!-- 操作提示 -->
-    <div class="mt-6 p-3 bg-blue-50 rounded-lg border border-blue-200">
+    <div class="mt-6 p-3 bg-blue-50 rounded-lg border border-blue-200 hidden">
       <p class="text-sm text-blue-700">
         <svg
           class="w-4 h-4 inline mr-1"
@@ -103,16 +103,14 @@
 <script setup>
 import { computed } from "vue";
 import { useSetingStore } from "~/store/seting.js";
-
 const setingStore = useSetingStore();
-
 // 获取图片列表
 const imageList = computed(() => {
-  return setingStore.getImageList();
+  return setingStore.imageList;
 });
 // 获取当前选中的图片
 const currentImage = computed(() => {
-  return setingStore.getCurrentImage();
+  return setingStore.selectedImage.value;
 });
 // 检查图片是否被选中
 const isSelected = (image) => {

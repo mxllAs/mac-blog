@@ -11,8 +11,8 @@ export default defineNuxtConfig({
   ],
   runtimeConfig:{
     public:{
-      version: "",
-      defaultBgImage: ""
+      version: "0.0.1",
+      defaultBgImage: "/images/bg2.webp"
     }
   }
 });

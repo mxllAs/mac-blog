@@ -21,10 +21,10 @@
   </div>
 </template>
 <script setup>
-import { ref, reactive, computed } from "vue";
+import { reactive, computed } from "vue";
 import SetingImage from "@/components/seting/setingImage.vue";
 import SetingText from "@/components/seting/setingText.vue";
-const activeKey = ref("setting-bg");
+const activeKey = useState("seting-menu-active", () => "setting-bg");
 const settingContent = {
   "setting-bg": SetingImage,
   "setting-text": SetingText,
@@ -45,7 +45,6 @@ const menu = reactive([
 // a-menu点击事件处理函数
 const handleMenuClick = (row) => {
   activeKey.value = row.key;
-  console.log(row);
 };
 </script>
 <style scoped>
