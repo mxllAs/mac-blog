@@ -4,18 +4,40 @@
       class="bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl px-4 py-3 shadow-2xl"
     >
       <div class="flex items-center space-x-3">
-        <!-- Finder -->
-        <div class="dock-item group">
-          <div
-            class="dock-icon-container bg-gradient-to-br from-blue-400 to-blue-600"
-          >
-            <img
-              src="~/assets/svg/finder-icon.svg"
-              alt="Finder"
-              class="w-7 h-7"
-            />
+        <!-- 首页-桌面 -->
+        <nuxt-link to="/">
+          <div class="dock-item group">
+            <div
+              class="dock-icon-container bg-gradient-to-br from-blue-400 to-blue-600"
+            >
+              <img
+                src="~/assets/svg/finder-icon.svg"
+                alt="Finder"
+                class="w-7 h-7"
+              />
+            </div>
           </div>
-        </div>
+        </nuxt-link>
+        <!-- 友情链接 -->
+        <nuxt-link to="links">
+          <div class="dock-item group">
+            <div
+              class="dock-icon-container bg-gradient-to-br from-orange-400 to-pink-500"
+            >
+              <img src="~/assets/svg/links-icon.svg" alt="友情链接" class="w-7 h-7" />
+            </div>
+          </div>
+        </nuxt-link>
+        <!-- 关于 -->
+        <nuxt-link to="about">
+          <div class="dock-item group">
+            <div
+              class="dock-icon-container bg-gradient-to-br from-orange-400 to-pink-500"
+            >
+              <img src="~/assets/svg/about.svg" alt="关于" class="w-7 h-7" />
+            </div>
+          </div>
+        </nuxt-link>
         <!-- 设置图标 -->
         <div class="dock-item group" @click="openSettings">
           <div

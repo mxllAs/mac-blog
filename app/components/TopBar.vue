@@ -25,7 +25,7 @@
   </div>
   <MacModal v-model="open" width="320px">
     <!-- 显示当前博客的版本 -->
-    <div class="bg-white/90 backdrop-blur-sm rounded-lg">
+    <div class="bg-white/90 backdrop-blur-sm rounded-md p-4">
       <div class="flex items-center space-x-3 mb-4">
         <div>
           <h3 class="text-lg font-semibold text-gray-800">关于此博客</h3>

@@ -7,7 +7,10 @@
       <header class="h-[42px]">
         <TopBar />
       </header>
+      <!-- 页面内容 -->
       <slot />
+      <!-- <NuxtPage /> -->
+      <!-- ------- -->
       <footer
         class="absolute bottom-0 flex justify-center items-center left-0 right-0"
       >

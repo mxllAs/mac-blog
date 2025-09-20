@@ -1,5 +1,5 @@
 <template>
-  <div class="flex">
+  <div class="flex p-[20px] pr-[0]">
     <div class="menu-container">
       <ul class="menu-list">
         <li
@@ -13,7 +13,7 @@
         </li>
       </ul>
     </div>
-    <div class="pl-[15px] flex-1 h-[432px]">
+    <div class="pl-[15px] flex-1 h-[432px] overflow-y-auto overflow-x-hidden">
       <transition name="fade" mode="out-in">
         <component :is="settingContentComponent" :key="activeKey" />
       </transition>
@@ -48,42 +48,6 @@ const handleMenuClick = (row) => {
 };
 </script>
 <style scoped>
-.menu-container {
-  width: 200px;
-  border-right: 1px solid #e5e7eb;
-  padding-right: 15px;
-}
-
-.menu-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.menu-item {
-  padding: 8px 16px;
-  margin-bottom: 5px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  color: #374151;
-  font-size: 14px;
-}
-
-.menu-item:hover {
-  background-color: #f3f4f6;
-  color: #1f2937;
-}
-
-.menu-item.active {
-  background-color: #3b82f6;
-  color: white;
-}
-
-.menu-item.active:hover {
-  background-color: #2563eb;
-}
-
 /* 过渡动画样式 */
 .fade-enter-active,
 .fade-leave-active {

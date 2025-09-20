@@ -2,7 +2,7 @@
   <div>
     <!-- MacOS Hello 加载动画 -->
     <!-- <div v-if="once"> -->
-      <!-- <MacOSHelloAnimation /> -->
+    <!-- <MacOSHelloAnimation /> -->
     <!-- </div> -->
     <NuxtLayout>
       <NuxtPage />
