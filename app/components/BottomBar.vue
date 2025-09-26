@@ -4,47 +4,32 @@
       class="bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl px-4 py-3 shadow-2xl"
     >
       <div class="flex items-center space-x-3">
-        <!-- 首页-桌面 -->
-        <nuxt-link to="/">
+        <!-- 导航路由 -->
+        <nuxt-link 
+          v-for="route in navigationRoutes" 
+          :key="route.path" 
+          :to="route.path"
+        >
           <div class="dock-item group">
             <div
-              class="dock-icon-container bg-gradient-to-br from-blue-400 to-blue-600"
+              class="dock-icon-container"
+              :class="route.gradient"
             >
               <img
-                src="~/assets/svg/finder-icon.svg"
-                alt="Finder"
+                :src="route.icon"
+                :alt="route.alt"
                 class="w-7 h-7"
               />
             </div>
           </div>
         </nuxt-link>
-        <!-- 友情链接 -->
-        <nuxt-link to="links">
-          <div class="dock-item group">
-            <div
-              class="dock-icon-container bg-gradient-to-br from-orange-400 to-pink-500"
-            >
-              <img src="~/assets/svg/links-icon.svg" alt="友情链接" class="w-7 h-7" />
-            </div>
-          </div>
-        </nuxt-link>
-        <!-- 关于 -->
-        <nuxt-link to="about">
-          <div class="dock-item group">
-            <div
-              class="dock-icon-container bg-gradient-to-br from-orange-400 to-pink-500"
-            >
-              <img src="~/assets/svg/about.svg" alt="关于" class="w-7 h-7" />
-            </div>
-          </div>
-        </nuxt-link>
-        <!-- 设置图标 -->
+        <!-- 设置图标-打开新窗口 -->
         <div class="dock-item group" @click="openSettings">
           <div
             class="dock-icon-container bg-gradient-to-br from-gray-500 to-gray-700"
           >
             <img
-              src="~/assets/svg/settings-icon.svg"
+              :src="settingsIcon"
               alt="设置"
               class="w-7 h-7"
             />
@@ -58,7 +43,7 @@
             class="dock-icon-container bg-gradient-to-br from-gray-400 to-gray-600"
           >
             <img
-              src="~/assets/svg/trash-icon.svg"
+              :src="trashIcon"
               alt="垃圾桶"
               class="w-7 h-7"
             />
@@ -75,10 +60,45 @@
 <script setup>
 import MacModal from "@/components/MacModal.vue";
 import Seting from "@/components/seting/index.vue";
+import finderIcon from '@/assets/svg/finder-icon.svg'; //首页
+import articleIcon from '@/assets/svg/article-list-icon.svg'; //文章列表
+import linksIcon from '@/assets/svg/links-icon.svg'; //友情链接
+import aboutIcon from '@/assets/svg/about.svg'; //关于
+import settingsIcon from '@/assets/svg/settings-icon.svg'; //设置
+import trashIcon from '@/assets/svg/trash-icon.svg'; //垃圾桶
+
 const open = ref(false);
 const openSettings = () => {
   open.value = true;
 };
+
+// 导航路由配置
+const navigationRoutes = [
+  {
+    path: '/',
+    icon: finderIcon,
+    alt: 'Finder',
+    gradient: 'bg-gradient-to-br from-blue-400 to-blue-600'
+  },
+  {
+    path: '/article',
+    icon: articleIcon,
+    alt: '文章列表',
+    gradient: 'bg-gradient-to-br from-green-400 to-emerald-600'
+  },
+  {
+    path: '/links',
+    icon: linksIcon,
+    alt: '友情链接',
+    gradient: 'bg-gradient-to-br from-orange-400 to-pink-500'
+  },
+  {
+    path: '/about',
+    icon: aboutIcon,
+    alt: '关于',
+    gradient: 'bg-gradient-to-br from-purple-400 to-purple-600'
+  }
+];
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <template>
   <MacWindow @close="closeWindow">
-    <div class="p-8 h-[900px]">
+    <div>
       <h1 class="text-3xl font-bold mb-8 text-center">MacOS 风格博客系统</h1>
       <div class="max-w-2xl mx-auto">
         <div class="bg-white/80 backdrop-blur-sm rounded-lg p-6 shadow-lg">

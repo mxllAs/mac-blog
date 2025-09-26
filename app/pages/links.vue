@@ -1,6 +1,6 @@
 <template>
   <MacWindow @close="closeWindow">
-    <div class="p-8 h-[900px]">
+    <div>
       <h1 class="text-3xl font-bold mb-8 text-center">友情链接</h1>
     </div>
   </MacWindow>

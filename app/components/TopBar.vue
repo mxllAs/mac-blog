@@ -44,6 +44,32 @@
           <span class="text-sm text-gray-600 w-[50px]">技术栈:</span>
           <span class="text-sm font-medium text-gray-800">Nuxt 4</span>
         </div>
+        <!-- 备案信息和版权信息 -->
+        <div class="mt-4 pt-4 border-t border-gray-200/50">
+          <div class="space-y-2">
+            <!-- 备案信息 -->
+            <div class="flex flex-col space-y-1 text-xs text-gray-500">
+              <a 
+                target="_blank" 
+                href="/" 
+                class="hover:text-blue-500 transition-colors duration-200 hover:underline"
+              >
+                豫公网安备41017202000114号
+              </a>
+              <a 
+                href="https://beian.miit.gov.cn/" 
+                target="_blank"
+                class="hover:text-blue-500 transition-colors duration-200 hover:underline"
+              >
+                豫ICP备2022027159号-2
+              </a>
+            </div>
+            <!-- 版权信息 -->
+            <div class="text-xs text-gray-500">
+              <span class="text-gray-400">©</span> 2024 - 2025 小贺 / mxll
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </MacModal>
