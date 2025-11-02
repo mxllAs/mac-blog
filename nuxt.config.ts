@@ -9,10 +9,11 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "@pinia/nuxt",
   ],
-  runtimeConfig:{
-    public:{
+  runtimeConfig: {
+    public: {
       version: "0.0.1",
-      defaultBgImage: "/images/bg2.webp"
-    }
-  }
+      defaultBgImage: "/images/bg2.webp",
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || '/api'
+    },
+  },
 });
