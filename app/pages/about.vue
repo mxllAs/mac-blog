@@ -204,7 +204,16 @@ const { data } = await useAsyncData("about", () =>
   $fetch(config.public.apiBase + "/about")
 );
 
-const baseInfo = ref(null);
+const baseInfo = ref({
+  name: '',
+  // 兼容后端：该字段目前在项目中用于存储出生日期字符串（用于计算年龄）
+  age: '',
+  // 额外默认字段，防止页面渲染时出现 undefined
+  hobby: '',
+  gender: '',
+  weixin: '',
+  koukou: '',
+});
 const content = ref("");
 
 if (data.value && data.value.code === 200) {
