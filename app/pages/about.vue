@@ -199,7 +199,6 @@ const router = useRouter();
 const closeWindow = () => {
   router.push("/");
 };
-
 const { data } = await useAsyncData("about", () =>
   $fetch(config.public.apiBase + "/about")
 );

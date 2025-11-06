@@ -10,7 +10,7 @@
           <div class="space-y-4">
             <div
               v-for="article in articles"
-              :key="article.id"
+              :key="article._id"
               class="p-4 bg-gray-50 hover:bg-gray-100 rounded-lg border border-gray-200 transition-colors group cursor-pointer"
               @click="goToArticle(article.id)"
             >
@@ -22,13 +22,13 @@
                     {{ article.title }}
                   </h3>
                   <p class="text-sm text-gray-600 mt-2 line-clamp-2">
-                    {{ article.summary }}
+                    {{ article.excerpt }}
                   </p>
                   <div
                     class="flex items-center mt-3 text-xs text-gray-500 space-x-4"
                   >
-                    <span>{{ article.date }}</span>
-                    <span>{{ article.category }}</span>
+                    <span>{{ article.createdAt }}</span>
+                    <span>{{ article.category.name }}</span>
                     <span>阅读量: {{ article.views }}</span>
                   </div>
                 </div>
@@ -79,58 +79,11 @@
 
 <script setup>
 import MacWindow from "~/components/MacWindow.vue";
-
 const router = useRouter();
+const config = useRuntimeConfig();
 
 // 模拟文章数据
-const articles = ref([
-  {
-    id: 1,
-    title: "Vue 3 Composition API 深入解析",
-    summary:
-      "深入了解 Vue 3 的 Composition API，掌握现代 Vue 开发的核心概念和最佳实践。",
-    date: "2024-01-15",
-    category: "Vue.js",
-    views: 1234,
-  },
-  {
-    id: 2,
-    title: "Nuxt 4 新特性详解",
-    summary:
-      "探索 Nuxt 4 带来的全新特性，包括性能优化、开发体验提升等方面的改进。",
-    date: "2024-01-10",
-    category: "Nuxt.js",
-    views: 856,
-  },
-  {
-    id: 3,
-    title: "Tailwind CSS 实战技巧",
-    summary:
-      "分享 Tailwind CSS 在实际项目中的使用技巧和最佳实践，提高开发效率。",
-    date: "2024-01-05",
-    category: "CSS",
-    views: 692,
-  },
-  {
-    id: 4,
-    title: "JavaScript 异步编程进阶",
-    summary:
-      "深入理解 JavaScript 异步编程，包括 Promise、async/await 等高级概念。",
-    date: "2023-12-28",
-    category: "JavaScript",
-    views: 1567,
-  },
-  {
-    id: 5,
-    title: "前端性能优化实战",
-    summary:
-      "从多个维度分析前端性能优化策略，包括代码分割、懒加载、缓存策略等。",
-    date: "2023-12-20",
-    category: "性能优化",
-    views: 2134,
-  },
-]);
-console.log(articles.value);
+const articles = ref([]);
 
 // 分页相关
 const currentPage = ref(1);
@@ -153,6 +106,21 @@ const goToPage = (page) => {
 const closeWindow = () => {
   router.push("/");
 };
+const { data } = useAsyncData("postList", () =>
+  $fetch(config.public.apiBase + "/post")
+);
+if (data.value && data.value.code === 200) {
+  articles.value = data.value.data.posts;
+}
+// const getPostList = () => {
+//   const { data } = useAsyncData("postList", () =>
+//     $fetch(config.public.apiBase + "/post")
+//   );
+//   if (data.value && data.value.code === 200) {
+//     articles.value = data.value.data.posts;
+//   }
+// };
+// getPostList();
 </script>
 
 <style scoped>

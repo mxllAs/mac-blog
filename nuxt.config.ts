@@ -13,7 +13,8 @@ export default defineNuxtConfig({
     public: {
       version: "0.0.1",
       defaultBgImage: "/images/bg2.webp",
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || '/api'
+      apiBase: "http://localhost:9527",
+      // apiBase: "/api",
     },
   },
 });
