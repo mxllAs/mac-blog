@@ -80,7 +80,6 @@
 <script setup>
 import MacWindow from "~/components/MacWindow.vue";
 const router = useRouter();
-const config = useRuntimeConfig();
 
 // 模拟文章数据
 const articles = ref([]);
@@ -88,6 +87,22 @@ const articles = ref([]);
 // 分页相关
 const currentPage = ref(1);
 const totalPages = ref(10);
+
+// 使用封装的API获取文章列表
+// useApi现在直接返回data或抛出错误，useAsyncData会捕获它
+const { data: articleData, error } = await useAsyncData("postList", () =>
+  useApi("/post")
+);
+
+if (error.value) {
+  // 错误现在会被自动捕获，这里可以处理UI反馈，例如显示一个错误提示
+  console.error("获取文章列表失败:", error.value.message);
+} else if (articleData.value) {
+  // 如果成功，articleData.value就是后端返回的data对象
+  articles.value = articleData.value.posts;
+  // 假设API返回总页数
+  // totalPages.value = articleData.value.totalPages;
+}
 
 // 跳转到文章详情
 const goToArticle = (id) => {
@@ -98,7 +113,10 @@ const goToArticle = (id) => {
 const goToPage = (page) => {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page;
-    router.push(`/article/list/${page}`);
+    // 这里可以重新获取数据或依赖Nuxt的页面参数变化
+    // 例如: router.push(`/article/list/${page}`);
+    // 注意：如果只是在当前页面换页，更好的方式是监听页码变化并重新获取数据
+    console.log(`跳转到页面: ${page}`);
   }
 };
 
@@ -106,12 +124,6 @@ const goToPage = (page) => {
 const closeWindow = () => {
   router.push("/");
 };
-const { data } = useAsyncData("postList", () =>
-  $fetch(config.public.apiBase + "/post")
-);
-if (data.value && data.value.code === 200) {
-  articles.value = data.value.data.posts;
-}
 // const getPostList = () => {
 //   const { data } = useAsyncData("postList", () =>
 //     $fetch(config.public.apiBase + "/post")
