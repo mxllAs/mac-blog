@@ -5,14 +5,17 @@
   >
     <div class="rounded-lg bg-[#fff] shadow-md" :class="`${width}`">
       <!-- 窗口化 -->
-      <WindowTopBar @close="emit('close')" @minimize="emit('minimize')" @maximize="emit('maximize')" />
-      <div class="h-[var(--window-show-height)] overflow-y-auto overflow-x-hidden">
+      <WindowTopBar
+        @close="emit('close')"
+        @minimize="emit('minimize')"
+        @maximize="emit('maximize')"
+      />
+      <div
+        class="h-[var(--window-show-height)] overflow-y-auto overflow-x-hidden bg-cover"
+        :style="`background-image: url(${bgImg}); scrollbar-color: ${scrollbarColor}`"
+      >
         <!-- 插槽 - 添加过渡动画 -->
-        <transition 
-          name="mac-window-content" 
-          mode="out-in"
-          appear
-        >
+        <transition name="mac-window-content" mode="out-in" appear>
           <slot></slot>
         </transition>
       </div>
@@ -21,12 +24,21 @@
 </template>
 
 <script setup>
+import bgImg from "@/assets/images/def-list-bg.webp";
 import WindowTopBar from "@/components/topbar/WindowTopBar.vue";
 const emit = defineEmits(["close", "minimize", "maximize"]);
 const props = defineProps({
   width: {
     type: String,
     default: "w-[98%]",
+  },
+  bgImg: {
+    type: String,
+    default: bgImg,
+  },
+  scrollbarColor: {
+    type: String,
+    default: "rgba(0, 0, 0, 0.25) transparent",
   },
 });
 </script>

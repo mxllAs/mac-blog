@@ -1,6 +1,7 @@
 <template>
   <div
-    class="flex items-center justify-between w-full bg-gray-100 px-4 py-2 rounded-t-md cursor-move"
+    class="flex items-center justify-between w-full bg-gray-100 px-4 py-2 rounded-t-md"
+    :class="{ 'cursor-move': drag }"
   >
     <!-- macOS 风格的窗口控制按钮 -->
     <div class="flex items-center space-x-2">
@@ -29,6 +30,13 @@
 <script setup>
 // window窗口 顶部导航栏
 const emit = defineEmits(["close", "minimize", "maximize"]);
+// 默认鼠标放上去不能拖动
+const props = defineProps({
+  drag: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 // 关闭窗口
 const closeWindow = () => {

@@ -15,6 +15,7 @@
         <div ref="modalTitleRef">
           <!-- macOS 风格的窗口控制按钮 -->
           <WindowTopBar
+            :drag="props.drag"
             @close="closeWindow"
             @minimize="minimizeWindow"
             @maximize="maximizeWindow"
@@ -45,6 +46,10 @@ const props = defineProps({
   width: {
     type: String,
     default: "800px",
+  },
+  drag: {
+    type: Boolean,
+    default: true,
   },
 });
 const open = defineModel({

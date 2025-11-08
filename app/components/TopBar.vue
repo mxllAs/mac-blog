@@ -23,7 +23,7 @@
       </div>
     </div>
   </div>
-  <MacModal v-model="open" width="320px">
+  <MacModal v-model="open" width="320px" :drag="true">
     <!-- 显示当前博客的版本 -->
     <div class="bg-white/90 backdrop-blur-sm rounded-md p-4">
       <div class="flex items-center space-x-3 mb-4">
