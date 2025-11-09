@@ -7,7 +7,7 @@
       <!-- 窗口化 -->
       <WindowTopBar
         @close="emit('close')"
-        @minimize="emit('minimize')"
+        @minimize="emit('minimize')"  
         @maximize="emit('maximize')"
       />
       <div
@@ -24,9 +24,12 @@
 </template>
 
 <script setup>
-import bgImg from "@/assets/images/def-list-bg.webp";
+import { toRefs } from 'vue';
+import defaultBgImg from "@/assets/images/def-list-bg.webp";
 import WindowTopBar from "@/components/topbar/WindowTopBar.vue";
+
 const emit = defineEmits(["close", "minimize", "maximize"]);
+
 const props = defineProps({
   width: {
     type: String,
@@ -34,13 +37,16 @@ const props = defineProps({
   },
   bgImg: {
     type: String,
-    default: bgImg,
+    default: defaultBgImg,
   },
   scrollbarColor: {
     type: String,
     default: "rgba(0, 0, 0, 0.25) transparent",
   },
 });
+
+// 解构props以便在模板中直接使用
+const { width, bgImg, scrollbarColor } = toRefs(props);
 </script>
 
 <style scoped>

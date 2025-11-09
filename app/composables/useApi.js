@@ -30,9 +30,18 @@ export const useApi = async (url, options = {}) => {
       throw new Error(response.message || '服务器返回错误');
     }
   } catch (err) {
-    // 处理网络错误或上面抛出的业务错误
-    // 可以根据err.statusCode进行更细致的错误处理
-    console.error(`API请求失败: ${err.message}`);
+    if (err.response) {
+      const status = err.response.status;
+      // 致命错误 (5xx 服务器故障或连接问题)
+      if (status >= 500) {
+        showError({
+          statusCode: status,
+          statusMessage: '服务器维护中或遇到内部错误，请联系管理员!',
+          fatal: true, // 触发全局错误页
+        });
+      }
+    }
     throw err; // 重新抛出错误，让useAsyncData的error属性可以接收到
+
   }
 };

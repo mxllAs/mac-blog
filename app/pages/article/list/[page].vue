@@ -1,8 +1,9 @@
 <template>
-  <MacWindow @close="closeWindow" scrollbarColor="rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.8)">
-    <div
-      class="min-h-screen bg-white/80 p-4 md:p-6"
-    >
+  <MacWindow
+    @close="closeWindow"
+    scrollbarColor="rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.8)"
+  >
+    <div class="min-h-full bg-white/80 p-4 md:p-6">
       <div class="max-w-7xl mx-auto">
         <!-- 页面标题 -->
         <div class="text-center mb-12">
@@ -20,7 +21,7 @@
             v-for="(article, index) in articles"
             :key="article._id"
             class="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
-            @click="goToArticle(article.id)"
+            @click="goToArticle(article.postId)"
           >
             <!-- 缩略图区域 -->
             <div class="relative h-48 overflow-hidden">

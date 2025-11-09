@@ -1,10 +1,10 @@
 <template>
-  <MacWindow @close="closeWindow">
+  <MacWindow @close="closeWindow" scrollbarColor="rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.8)">
     <div
-      class="p-6 sm:p-8 text-gray-800 bg-gradient-to-br from-gray-50 to-gray-100 rounded-b-lg min-h-full"
+      class="p-6 sm:p-8 text-gray-800 *:bg-white/80 rounded-b-lg min-h-full"
     >
       <!-- 个人头像区域 -->
-      <div class="flex flex-col items-center mb-8">
+      <div class="flex flex-col items-center mb-8 rounded-lg py-6">
         <div class="relative mb-4">
           <div
             class="w-24 h-24 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 p-1"
@@ -264,11 +264,11 @@ const age = computed(() => {
 }
 
 /* 信息项悬停效果 */
-.p-3:hover {
+/* .p-3:hover {
   background-color: #f9fafb;
   transform: translateX(5px);
   transition: all 0.2s ease;
-}
+} */
 
 /* 头像动画 */
 .w-24 {
