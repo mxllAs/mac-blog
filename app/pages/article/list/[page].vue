@@ -202,26 +202,40 @@ const articles = ref([]);
 const currentPage = ref(Number(route.params.page));
 const totalPages = ref(0);
 
-// 使用封装的API获取文章列表
-// useApi现在直接返回data或抛出错误，useAsyncData会捕获它
-const { data: articleData, error } = await useAsyncData("postList", () =>
-  useApi("/post", {
-    params: {
-      page: currentPage.value,
-      pageSize: 9,
-      status: 1,
-    },
-  })
+// 使用封装的API获取文章列表，监听路由参数变化
+const { data: articleData, error, refresh } = await useAsyncData(
+  () => `postList-${currentPage.value}`,
+  () =>
+    useApi("/post", {
+      params: {
+        page: currentPage.value,
+        pageSize: 9,
+        status: 1,
+      },
+    }),
+  { watch: [currentPage] }
 );
 
-if (error.value) {
-  // 错误现在会被自动捕获，这里可以处理UI反馈，例如显示一个错误提示
-  console.error("获取文章列表失败:", error.value.message);
-} else if (articleData.value) {
-  // 如果成功，articleData.value就是后端返回的data对象
-  articles.value = articleData.value.posts;
-  totalPages.value = articleData.value.totalPages;
-}
+// 监听路由参数变化
+watch(
+  () => route.params.page,
+  (newPage) => {
+    currentPage.value = Number(newPage);
+  },
+  { immediate: true }
+);
+
+// 处理数据
+watchEffect(() => {
+  if (error.value) {
+    // 错误现在会被自动捕获，这里可以处理UI反馈，例如显示一个错误提示
+    console.error("获取文章列表失败:", error.value.message);
+  } else if (articleData.value) {
+    // 如果成功，articleData.value就是后端返回的data对象
+    articles.value = articleData.value.posts;
+    totalPages.value = articleData.value.totalPages;
+  }
+});
 
 // 跳转到文章详情
 const goToArticle = (id) => {
