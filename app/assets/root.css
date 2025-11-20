@@ -1,7 +1,0 @@
-/* 定义各种css变量 */
-:root {
-  /* 按钮的选中 */
-  --setting-item-active-bg-color: #2563eb;
-  /* 按钮的选中文字颜色 */
-  --setting-item-active-text-color: #fff;
-}

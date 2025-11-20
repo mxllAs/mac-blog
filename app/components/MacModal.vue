@@ -8,36 +8,21 @@
       :body-style="bodyStyle"
       :mask-style="maskStyle"
       wrapClassName="mac-modal-wrapper"
+      :maskClosable="false"
+      :destroyOnClose="true"
     >
       <template #title>
-        <div
-          ref="modalTitleRef"
-          class="flex items-center justify-between w-full bg-gray-100 px-4 py-2 rounded-t-lg cursor-move"
-        >
+        <div ref="modalTitleRef">
           <!-- macOS 风格的窗口控制按钮 -->
-          <div class="flex items-center space-x-2">
-            <!-- 关闭按钮 -->
-            <button
-              @click="open = false"
-              class="w-3 h-3 bg-red-500 rounded-full hover:bg-red-600 transition-colors duration-200"
-              title="关闭"
-            ></button>
-            <!-- 最小化按钮 -->
-            <button
-              @click="open = false"
-              class="w-3 h-3 bg-yellow-500 rounded-full hover:bg-yellow-600 transition-colors duration-200"
-              title="最小化"
-            ></button>
-            <!-- 放大按钮 -->
-            <button
-              @click="open = false"
-              class="w-3 h-3 bg-green-500 rounded-full hover:bg-green-600 transition-colors duration-200"
-              title="放大"
-            ></button>
-          </div>
+          <WindowTopBar
+            :drag="props.drag"
+            @close="closeWindow"
+            @minimize="minimizeWindow"
+            @maximize="maximizeWindow"
+          />
         </div>
       </template>
-      <div class="w-full h-full p-[20px]">
+      <div class="w-full h-full">
         <slot></slot>
       </div>
       <template #modalRender="{ originVNode }">
@@ -50,6 +35,7 @@
   </div>
 </template>
 <script setup>
+import WindowTopBar from "@/components/topbar/WindowTopBar.vue";
 import { ref, computed, watch, watchEffect } from "vue";
 import { useDraggable } from "@vueuse/core";
 const props = defineProps({
@@ -60,6 +46,10 @@ const props = defineProps({
   width: {
     type: String,
     default: "800px",
+  },
+  drag: {
+    type: Boolean,
+    default: true,
   },
 });
 const open = defineModel({
@@ -74,6 +64,18 @@ const bodyStyle = ref({
 const maskStyle = ref({
   background: "transparent",
 });
+// 关闭窗口
+const closeWindow = () => {
+  open.value = false;
+};
+// 最小化窗口
+const minimizeWindow = () => {
+  open.value = false;
+};
+// 放大窗口
+const maximizeWindow = () => {
+  open.value = false;
+};
 // 拖拽相关
 const modalTitleRef = ref(null);
 const { x, y, isDragging } = useDraggable(modalTitleRef);
@@ -90,7 +92,7 @@ const dragRect = ref({
   top: 0,
   bottom: 0,
 });
-watch([x, y], () => {
+const watchXY =  watch([x, y], () => {
   if (!startedDrag.value) {
     startX.value = x.value;
     startY.value = y.value;
@@ -111,7 +113,7 @@ watch([x, y], () => {
   }
   startedDrag.value = true;
 });
-watch(isDragging, () => {
+const watchIsDragging = watch(isDragging, () => {
   if (!isDragging) {
     startedDrag.value = false;
   }
@@ -132,6 +134,10 @@ const transformStyle = computed(() => {
   return {
     transform: `translate(${transformX.value}px, ${transformY.value}px)`,
   };
+});
+onUnmounted(() => {
+  watchXY();
+  watchIsDragging();
 });
 </script>
 
