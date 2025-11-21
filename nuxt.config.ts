@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     "@ant-design-vue/nuxt",
     "@vueuse/nuxt",
     "@pinia/nuxt",
+    '@nuxt/content'
   ],
   runtimeConfig: {
     public: {
