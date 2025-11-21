@@ -61,7 +61,7 @@ import ArticleList from "@/pages/article/components/index.vue";
 import Seting from "@/components/seting/index.vue";
 import finderIcon from "@/assets/svg/finder-icon.svg"; //首页
 import articleIcon from "@/assets/svg/article-list-icon.svg"; //文章列表
-// import linksIcon from "@/assets/svg/links-icon.svg"; //友情链接
+import linksIcon from "@/assets/svg/links-icon.svg"; //友情链接
 import aboutIcon from "@/assets/svg/about.svg"; //关于
 import settingsIcon from "@/assets/svg/settings-icon.svg"; //设置
 import trashIcon from "@/assets/svg/trash-icon.svg"; //垃圾桶
@@ -86,12 +86,14 @@ const navigationRoutes = [
     alt: "文章列表",
     gradient: "bg-gradient-to-br from-green-400 to-emerald-600",
   },
-  // {
-  //   path: '/links',
-  //   icon: linksIcon,
-  //   alt: '友情链接',
-  //   gradient: 'bg-gradient-to-br from-orange-400 to-pink-500'
-  // },
+  {
+    // path: '/links',
+    path: "/changeLog",
+    icon: linksIcon,
+    // alt: '友情链接',
+    alt: "更新日志",
+    gradient: "bg-gradient-to-br from-orange-400 to-pink-500",
+  },
   {
     path: "/about",
     icon: aboutIcon,

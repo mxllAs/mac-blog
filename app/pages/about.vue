@@ -1,7 +1,7 @@
 <template>
   <MacWindow @close="closeWindow" scrollbarColor="rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.8)">
     <div
-      class="p-6 sm:p-8 text-gray-800 *:bg-white/80 rounded-b-lg min-h-full"
+      class="p-6 sm:p-8 text-gray-800 :bg-white/80 rounded-b-lg min-h-full"
     >
       <!-- 个人头像区域 -->
       <div class="flex flex-col items-center mb-8 rounded-lg py-6">
