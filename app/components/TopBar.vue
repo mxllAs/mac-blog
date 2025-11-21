@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="w-full h-full p-2 flex items-center justify-between text-[#fff] bg-gray-500/20 backdrop-blur-md"
-  >
+  <div class="w-full h-full p-2 flex items-center justify-between text-[#fff] bg-gray-500/20 backdrop-blur-md">
     <div>
       <div class="cursor-pointer">
         <img src="@/assets/svg/apple.svg" alt="logo" @click="open = true" />
@@ -12,11 +10,7 @@
     <div class="flex items-center space-x-5">
       <img src="@/assets/svg/battery.svg" alt="battery-svg" />
       <img src="@/assets/svg/wifi.svg" alt="wifi-svg" />
-      <img
-        src="@/assets/svg/toggle.svg"
-        class="cursor-pointer"
-        alt="toggle-svg"
-      />
+      <img src="@/assets/svg/toggle.svg" class="cursor-pointer" alt="toggle-svg" />
       <!-- 时间显示 -->
       <div class="text-sm font-medium">
         {{ isClient ? currentTime : "" }}
@@ -49,18 +43,11 @@
           <div class="space-y-2">
             <!-- 备案信息 -->
             <div class="flex flex-col space-y-1 text-xs text-gray-500">
-              <a 
-                target="_blank" 
-                href="/" 
-                class="hover:text-blue-500 transition-colors duration-200 hover:underline"
-              >
+              <a target="_blank" href="/" class="hover:text-blue-500 transition-colors duration-200 hover:underline">
                 豫公网安备41017202000114号
               </a>
-              <a 
-                href="https://beian.miit.gov.cn/" 
-                target="_blank"
-                class="hover:text-blue-500 transition-colors duration-200 hover:underline"
-              >
+              <a href="https://beian.miit.gov.cn/" target="_blank"
+                class="hover:text-blue-500 transition-colors duration-200 hover:underline">
                 豫ICP备2022027159号-2
               </a>
             </div>
