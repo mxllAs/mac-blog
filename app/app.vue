@@ -12,20 +12,78 @@
 
 <script setup>
 // import MacOSHelloAnimation from "~/components/MacOSHelloAnimation.vue";
+// 配置TDK
+useHead({
+  // 这里的 %s 会被子页面的 title 替换，实现 "文章标题 - 小贺的博客"
+  titleTemplate: (titleChunk) => {
+    return titleChunk ? `${titleChunk} - 小贺的博客` : '小贺的博客 - macOS 风格个人站';
+  },
+  meta: [
+    // 基础 SEO 标签
+    { name: 'description', content: '基于 Nuxt 4 构建的沉浸式 Web OS 风格博客，分享技术与生活。' },
+    { name: 'keywords', content: 'Nuxt 4, Vue 3, macOS风格, 个人博客, 前端开发, JavaScript, CSS, HTML' },
+    { name: 'author', content: '小贺' },
+    { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' },
 
-// 全局监听ESC键，按下时回到首页
-onMounted(() => {
-  const handleKeyDown = (event) => {
-    if (event.key === "Escape") {
-      navigateTo("/");
+    // Open Graph (社交媒体分享)
+    { property: 'og:site_name', content: '小贺的博客' },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:title', content: '小贺的博客 - macOS 风格个人站' },
+    { property: 'og:description', content: '基于 Nuxt 4 构建的沉浸式 Web OS 风格博客，分享技术与生活。' },
+    { property: 'og:locale', content: 'zh_CN' },
+
+    // Twitter Cards
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: '小贺的博客 - macOS 风格个人站' },
+    { name: 'twitter:description', content: '基于 Nuxt 4 构建的沉浸式 Web OS 风格博客，分享技术与生活。' },
+
+    // 其他 SEO 标签
+    { name: 'robots', content: 'index, follow' },
+    { name: 'googlebot', content: 'index, follow' },
+    { 'http-equiv': 'Content-Language', content: 'zh-CN' },
+    { name: 'format-detection', content: 'telephone=no' }
+  ],
+  link: [
+    { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+    { rel: 'canonical', href: 'https://www.xiaohev.com' }
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      children: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "name": "小贺的博客",
+        "description": "基于 Nuxt 4 构建的沉浸式 Web OS 风格博客，分享技术与生活",
+        "url": "https://www.xiaohev.com",
+        "author": {
+          "@type": "Person",
+          "name": "小贺"
+        },
+        "publisher": {
+          "@type": "Person",
+          "name": "小贺"
+        },
+        "inLanguage": "zh-CN"
+      })
     }
-  };
+  ]
+})
+// 全局监听ESC键，按下时回到首页
+const handleKeyDown = (event) => {
+  if (event.key === "Escape") {
+    navigateTo("/");
+  }
+};
+
+onMounted(() => {
   document.addEventListener("keydown", handleKeyDown);
-  // 组件卸载时移除监听器
 });
+
 onUnmounted(() => {
   document.removeEventListener("keydown", handleKeyDown);
 });
+
 </script>
 
 <style scoped></style>

@@ -26,7 +26,7 @@
             <!-- 缩略图区域 -->
             <div class="relative h-48 overflow-hidden">
               <img
-                :src="article.cover || defListImg"
+                :src="article.cover?.url || defListImg"
                 :alt="`文章:${article.title}缩略图`"
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />

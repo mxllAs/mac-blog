@@ -200,7 +200,7 @@ dayjs.locale('zh-cn');
 const route = useRoute();
 const router = useRouter();
 const id = route.params.id;
-const bgImg = computed(() => article.value?.cover || defaultBgImg);
+const bgImg = computed(() => article.value?.cover?.url || defaultBgImg);
 // 获取文章数据
 const { data: article, error } = await useAsyncData(`article-${id}`, () =>
   useApi(`/post/${id}`)
