@@ -18,8 +18,7 @@
             @click="goToArticle(article.postId)">
             <!-- 缩略图区域 -->
             <div class="relative h-48 overflow-hidden">
-              <NuxtImg
-                :src="article.cover?.url ? (article.cover.url.startsWith('/files') ? `https://xiaohev.com${article.cover.url}` : article.cover.url) : defListImg"
+              <NuxtImg :src="article.cover?.url ? `https://www.xiaohev.com${article.cover.url}` : defListImg"
                 :alt="`文章:${article.title}缩略图`" format="webp" loading="lazy" placeholder
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
               <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
