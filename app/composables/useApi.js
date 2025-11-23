@@ -7,7 +7,8 @@
  */
 export const useApi = async (url, options = {}) => {
   const config = useRuntimeConfig();
-  const apiBase = config.public.apiBase;
+  // On server, prefer private apiBase if set, otherwise use public.apiBase
+  const apiBase = (process.server && config.apiBase) ? config.apiBase : config.public.apiBase;
 
   const defaultHeaders = {
     // 可以添加认证Token等
