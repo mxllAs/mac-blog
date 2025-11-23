@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxt/content",
     "@nuxt/icon",
+    "@nuxt/image",
   ],
   runtimeConfig: {
     // 私有配置 (仅服务端 Nuxt SSR 可用)

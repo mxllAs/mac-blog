@@ -26,6 +26,7 @@
   "devDependencies": {
     "@nuxt/content": "^3.8.2",
     "@nuxt/icon": "^2.1.0",
+    "@nuxt/image": "^2.0.0",
     "@types/node": "^24.9.2"
   }
 }
