@@ -8,7 +8,7 @@
             class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
             文章列表
           </h1>
-          <p class="text-gray-600 text-lg">探索精彩内容，发现无限可能</p>
+          <p class="text-gray-600 text-lg">探索精彩内容,发现无限可能</p>
         </div>
 
         <!-- 文章网格布局 -->
@@ -18,8 +18,9 @@
             @click="goToArticle(article.postId)">
             <!-- 缩略图区域 -->
             <div class="relative h-48 overflow-hidden">
-              <NuxtImg :src="article.cover?.url || defListImg" :alt="`文章:${article.title}缩略图`" format="webp"
-                loading="lazy" placeholder
+              <NuxtImg
+                :src="article.cover?.url ? (article.cover.url.startsWith('/files') ? `https://xiaohev.com${article.cover.url}` : article.cover.url) : defListImg"
+                :alt="`文章:${article.title}缩略图`" format="webp" loading="lazy" placeholder
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
               <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
               <!-- 分类标签 -->
@@ -136,7 +137,7 @@
 <script setup>
 import dayjs from "dayjs";
 import MacWindow from "~/components/MacWindow.vue";
-// 图片已放入 public/images 目录，直接使用绝对路径字符串
+// 图片已放入 public/images 目录,直接使用绝对路径字符串
 const defListImg = "/images/def-list-img.webp";
 const router = useRouter();
 const route = useRoute();
@@ -148,7 +149,7 @@ const articles = ref([]);
 const currentPage = ref(Number(route.params.page));
 const totalPages = ref(0);
 
-// 使用封装的API获取文章列表，监听路由参数变化
+// 使用封装的API获取文章列表,监听路由参数变化
 const { data: articleData, error, refresh } = await useAsyncData(
   () => `postList-${currentPage.value}`,
   () =>
@@ -174,10 +175,10 @@ watch(
 // 处理数据
 watchEffect(() => {
   if (error.value) {
-    // 错误现在会被自动捕获，这里可以处理UI反馈，例如显示一个错误提示
+    // 错误现在会被自动捕获,这里可以处理UI反馈,例如显示一个错误提示
     console.error("获取文章列表失败:", error.value.message);
   } else if (articleData.value) {
-    // 如果成功，articleData.value就是后端返回的data对象
+    // 如果成功,articleData.value就是后端返回的data对象
     articles.value = articleData.value.posts;
     totalPages.value = articleData.value.totalPages;
   }
