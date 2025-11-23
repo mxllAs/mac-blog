@@ -1,8 +1,12 @@
 <template>
   <div class="w-full h-full p-2 flex items-center justify-between text-[#fff] bg-gray-500/20 backdrop-blur-md">
     <div>
-      <div class="cursor-pointer">
+      <div class="cursor-pointer relative">
         <img src="@/assets/svg/apple.svg" alt="logo" @click="open = true" />
+        <!-- 版本更新红点提示 -->
+        <span v-if="showVersionNotification" class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full 
+                     border border-white shadow-lg animate-pulse">
+        </span>
       </div>
       <!-- 应用菜单显示地方 -->
       <div></div>
@@ -18,47 +22,7 @@
     </div>
   </div>
   <MacModal v-model="open" width="320px" :drag="true">
-    <!-- 显示当前博客的版本 -->
-    <div class="bg-white/90 backdrop-blur-sm rounded-md p-4">
-      <div class="flex items-center space-x-3 mb-4">
-        <div>
-          <h3 class="text-lg font-semibold text-gray-800">关于此博客</h3>
-          <p class="text-sm text-gray-500">小贺</p>
-        </div>
-      </div>
-
-      <div class="space-y-3">
-        <div class="flex items-center py-2 border-b border-gray-100 gap-2">
-          <span class="text-sm text-gray-600 w-[50px]">版本:</span>
-          <span class="text-sm font-medium text-gray-800">{{
-            config.public.version
-          }}</span>
-        </div>
-        <div class="flex items-center py-2 gap-2">
-          <span class="text-sm text-gray-600 w-[50px]">技术栈:</span>
-          <span class="text-sm font-medium text-gray-800">Nuxt 4</span>
-        </div>
-        <!-- 备案信息和版权信息 -->
-        <div class="mt-4 pt-4 border-t border-gray-200/50">
-          <div class="space-y-2">
-            <!-- 备案信息 -->
-            <div class="flex flex-col space-y-1 text-xs text-gray-500">
-              <a target="_blank" href="/" class="hover:text-blue-500 transition-colors duration-200 hover:underline">
-                豫公网安备41017202000114号
-              </a>
-              <a href="https://beian.miit.gov.cn/" target="_blank"
-                class="hover:text-blue-500 transition-colors duration-200 hover:underline">
-                豫ICP备2022027159号-2
-              </a>
-            </div>
-            <!-- 版权信息 -->
-            <div class="text-xs text-gray-500">
-              <span class="text-gray-400">©</span> 2024 - 2025 小贺 / mxll
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <BlogInfo />
   </MacModal>
 </template>
 
@@ -66,22 +30,58 @@
 import dayjs from "dayjs";
 import { ref, onMounted, onUnmounted } from "vue";
 import MacModal from "./MacModal.vue";
-const config = useRuntimeConfig();
+
 // 当前时间
 const currentTime = ref("");
 const isClient = ref(false);
 let timer = null;
 const open = ref(false);
+
+// 版本更新通知 - 使用全局响应式状态
+const { notificationState, setCurrentVersion } = useVersionNotification();
+
+// 从全局状态获取是否显示红点
+const showVersionNotification = computed(() => notificationState.value.shouldShow);
+
+// 获取最新版本并设置到全局状态
+const checkVersionUpdate = async () => {
+  if (!process.client) return;
+
+  try {
+    const logs = await queryCollection('changelog')
+      .order('date', 'DESC')
+      .order('title', 'DESC')
+      .limit(1)
+      .all();
+
+    if (logs && logs[0]?.title) {
+      // 提取版本号
+      const match = logs[0].title.match(/[vV]?(\d+(\.\d+)*)/);
+      const currentVersion = match ? `v${match[1]}` : '';
+
+      // 设置当前版本到全局状态（会自动检查是否显示红点）
+      setCurrentVersion(currentVersion);
+    }
+  } catch (error) {
+    console.error('检查版本更新失败:', error);
+  }
+};
+
 // 更新时间
 const updateTime = () => {
   currentTime.value = dayjs().format("MM月DD日 HH:mm");
 };
+
 // 组件挂载时启动定时器
 onMounted(() => {
   isClient.value = true; // 标记为客户端
   updateTime(); // 立即更新一次
   timer = setInterval(updateTime, 1000); // 每秒更新
+
+  // 检查版本更新
+  checkVersionUpdate();
 });
+
 // 组件卸载时清除定时器
 onUnmounted(() => {
   if (timer) {
