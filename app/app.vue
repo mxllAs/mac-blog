@@ -12,9 +12,12 @@
 
 <script setup>
 // import MacOSHelloAnimation from "~/components/MacOSHelloAnimation.vue";
+const route = useRoute();
+// 定义你的基础域名（末尾不带斜杠）
+const siteUrl = 'https://www.xiaohev.com';
 // 配置TDK
 useHead({
-  // 这里的 %s 会被子页面的 title 替换，实现 "文章标题 - 小贺的博客"
+  // 这里的 %s 会被子页面的 title 替换
   titleTemplate: (titleChunk) => {
     return titleChunk ? `${titleChunk} - 小贺的博客` : '小贺的博客 - macOS 风格个人站';
   },
@@ -31,6 +34,8 @@ useHead({
     { property: 'og:title', content: '小贺的博客 - macOS 风格个人站' },
     { property: 'og:description', content: '基于 Nuxt 4 构建的沉浸式 Web OS 风格博客，分享技术与生活。' },
     { property: 'og:locale', content: 'zh_CN' },
+    // 2. 新增：动态设置 Open Graph 的 URL，这对分享很重要
+    { property: 'og:url', content: computed(() => `${siteUrl}${route.path}`) },
 
     // Twitter Cards
     { name: 'twitter:card', content: 'summary_large_image' },
@@ -45,17 +50,23 @@ useHead({
   ],
   link: [
     { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-    { rel: 'canonical', href: 'https://www.xiaohev.com' }
+    // 3. 修复：使用 computed 动态计算规范 URL
+    { 
+      rel: 'canonical', 
+      href: computed(() => `${siteUrl}${route.path}`) 
+    }
   ],
   script: [
     {
       type: 'application/ld+json',
+      // Schema 这里的 URL 保持为首页通常没问题，因为它描述的是"Blog"这个整体实体
+      // 如果你想让它更精确，也可以改成动态的，但目前的配置作为全局配置是可以接受的
       children: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "Blog",
         "name": "小贺的博客",
         "description": "基于 Nuxt 4 构建的沉浸式 Web OS 风格博客，分享技术与生活",
-        "url": "https://www.xiaohev.com",
+        "url": siteUrl, 
         "author": {
           "@type": "Person",
           "name": "小贺"
