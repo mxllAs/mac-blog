@@ -2,9 +2,8 @@
     <div class="bg-white/90 backdrop-blur-sm rounded-lg p-5 shadow-lg">
         <!-- 头部信息 -->
         <div class="flex items-center space-x-3 mb-5 pb-4 border-b border-gray-200">
-            <div
-                class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-md">
-                <span class="text-2xl">🍎</span>
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-md">
+                <img src="@/assets/images/logo.png" alt="logo" />
             </div>
             <div>
                 <h3 class="text-lg font-bold text-gray-800">小贺的技术博客</h3>
@@ -15,11 +14,17 @@
         <!-- 详细信息 -->
         <div class="space-y-2.5">
             <!-- 版本信息 -->
-            <div class="flex items-center py-2 gap-3 group hover:bg-gray-50/50 rounded-md px-2 transition-colors">
+
+            <div class="flex items-center py-2 gap-3 group hover:bg-gray-50/50 rounded-md px-2 transition-colors cursor-pointer"
+                @click="navigateToChangelog">
                 <span class="text-lg">📦</span>
                 <div class="flex-1">
                     <span class="text-xs text-gray-500 block">版本</span>
-                    <span class="text-sm font-semibold text-gray-800">{{ currentVersion }}</span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm font-semibold text-gray-800">{{ currentVersion }}</span>
+                        <span v-if="showNewBadge"
+                            class="px-1.5 py-0.5 bg-red-500 text-white text-[10px] rounded-full animate-pulse font-bold">NEW</span>
+                    </div>
                 </div>
             </div>
 
@@ -77,6 +82,9 @@
 <script setup>
 import { version as nuxtVersion } from 'nuxt/package.json';
 
+// 定义 emit 事件
+const emit = defineEmits(['close']);
+
 const config = useRuntimeConfig();
 
 // 从 changelog 获取最新版本
@@ -103,6 +111,17 @@ const currentVersion = computed(() => {
     }
     return 'v' + config.public.version;
 });
+
+// 版本更新通知
+const { notificationState } = useVersionNotification();
+const showNewBadge = computed(() => notificationState.value.shouldShow);
+const router = useRouter();
+
+const navigateToChangelog = () => {
+    router.push('/changeLog');
+    // 触发关闭弹窗事件
+    emit('close');
+};
 </script>
 
 <style scoped></style>

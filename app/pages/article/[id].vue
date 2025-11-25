@@ -149,7 +149,9 @@ const formatDate = (dateString) => {
 
 // 关闭窗口
 const closeWindow = () => {
-  router.back();
+  router.push({
+    path: 'article/list'
+  })
 };
 
 // 设置TDK

@@ -1,6 +1,6 @@
 <template>
   <MacWindow @close="closeWindow" scrollbarColor="rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.8)">
-    <div class="min-h-full bg-white/90 p-6 md:p-10">
+    <div class="min-h-full bg-white/80 p-6 md:p-10">
       <div class="mb-10 border-b border-gray-200 pb-4 flex items-end justify-between">
         <div>
           <h1 class="text-3xl font-bold text-gray-800">更新日志</h1>

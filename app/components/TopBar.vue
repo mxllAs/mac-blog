@@ -2,10 +2,13 @@
   <div class="w-full h-full p-2 flex items-center justify-between text-[#fff] bg-gray-500/20 backdrop-blur-md">
     <div>
       <div class="cursor-pointer relative">
-        <img src="@/assets/svg/apple.svg" alt="logo" @click="open = true" />
+        <!-- <img src="@/assets/svg/apple.svg" alt="logo" @click="open = true" /> -->
+        <img src="@/assets/svg/diannao.svg" alt="logo" @click="open = true" />
         <!-- 版本更新红点提示 -->
-        <span v-if="showVersionNotification" class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full 
-                     border border-white shadow-lg animate-pulse">
+        <span v-if="showVersionNotification"
+          class="absolute -top-0.5 -right-0.5 w-2 h-2 flex items-center justify-center">
+          <span class="absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75 animate-ping"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500 border border-white shadow-lg"></span>
         </span>
       </div>
       <!-- 应用菜单显示地方 -->
@@ -22,7 +25,7 @@
     </div>
   </div>
   <MacModal v-model="open" width="320px" :drag="true">
-    <BlogInfo />
+    <BlogInfo @close="open = false" />
   </MacModal>
 </template>
 
@@ -42,6 +45,7 @@ const { notificationState, setCurrentVersion } = useVersionNotification();
 
 // 从全局状态获取是否显示红点
 const showVersionNotification = computed(() => notificationState.value.shouldShow);
+
 
 // 获取最新版本并设置到全局状态
 const checkVersionUpdate = async () => {
