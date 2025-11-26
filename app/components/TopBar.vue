@@ -1,31 +1,41 @@
 <template>
-  <div class="w-full h-full p-2 flex items-center justify-between text-[#fff] bg-gray-500/20 backdrop-blur-md">
-    <div>
-      <div class="cursor-pointer relative">
-        <!-- <img src="@/assets/svg/apple.svg" alt="logo" @click="open = true" /> -->
-        <img src="@/assets/svg/diannao.svg" alt="logo" @click="open = true" />
-        <!-- 版本更新红点提示 -->
-        <span v-if="showVersionNotification"
-          class="absolute -top-0.5 -right-0.5 w-2 h-2 flex items-center justify-center">
-          <span class="absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75 animate-ping"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500 border border-white shadow-lg"></span>
-        </span>
+  <div
+    class="w-full h-full px-4 flex items-center justify-between text-white bg-gray-900/20 backdrop-blur-md shadow-sm select-none">
+    <div class="flex items-center group">
+      <div class="cursor-pointer group-hover:opacity-80 transition-opacity" @click="open = true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 5L9 19M9 5L3 19" />
+          <path d="M13 5V19M19 5V19M13 12H19" />
+        </svg>
       </div>
-      <!-- 应用菜单显示地方 -->
-      <div></div>
+      <span class="ml-3 text-xs font-bold hidden sm:block cursor-default tracking-wider">
+        XiaoHe Blog
+      </span>
     </div>
-    <div class="flex items-center space-x-5">
-      <img src="@/assets/svg/battery.svg" alt="battery-svg" />
-      <img src="@/assets/svg/wifi.svg" alt="wifi-svg" />
-      <img src="@/assets/svg/toggle.svg" class="cursor-pointer" alt="toggle-svg" />
-      <!-- 时间显示 -->
-      <div class="text-sm font-medium">
+
+    <div class="flex items-center gap-3 text-sm">
+
+      <a href="/rss.xml" target="_blank" class="flex items-center justify-center group" title="订阅 RSS">
+        <Icon name="ph:rss-simple-bold" class="w-4 h-4 cursor-pointer hover:text-orange-400 transition-colors" />
+      </a>
+
+      <Icon name="ph:speaker-high-fill" class="w-4 h-4" />
+
+      <Icon name="ph:wifi-high-bold" class="w-4 h-4" />
+
+      <Icon name="ph:battery-full-fill" class="w-5 h-5" />
+
+      <Icon name="ph:faders-bold" class="w-4 h-4 cursor-pointer hover:text-gray-200" />
+
+      <div class="text-xs font-medium ml-2 tracking-wide min-w-[80px] text-right">
         {{ isClient ? currentTime : "" }}
       </div>
     </div>
   </div>
+
   <MacModal v-model="open" width="320px" :drag="true">
-    <BlogInfo @close="open = false" />
+    <BlogInfo />
   </MacModal>
 </template>
 
@@ -33,65 +43,24 @@
 import dayjs from "dayjs";
 import { ref, onMounted, onUnmounted } from "vue";
 import MacModal from "./MacModal.vue";
+import BlogInfo from "./BlogInfo.vue";
 
-// 当前时间
-const currentTime = ref("");
 const isClient = ref(false);
-let timer = null;
+const currentTime = ref("");
 const open = ref(false);
+let timer = null;
 
-// 版本更新通知 - 使用全局响应式状态
-const { notificationState, setCurrentVersion } = useVersionNotification();
-
-// 从全局状态获取是否显示红点
-const showVersionNotification = computed(() => notificationState.value.shouldShow);
-
-
-// 获取最新版本并设置到全局状态
-const checkVersionUpdate = async () => {
-  if (!process.client) return;
-
-  try {
-    const logs = await queryCollection('changelog')
-      .order('date', 'DESC')
-      .order('title', 'DESC')
-      .limit(1)
-      .all();
-
-    if (logs && logs[0]?.title) {
-      // 提取版本号
-      const match = logs[0].title.match(/[vV]?(\d+(\.\d+)*)/);
-      const currentVersion = match ? `v${match[1]}` : '';
-
-      // 设置当前版本到全局状态（会自动检查是否显示红点）
-      setCurrentVersion(currentVersion);
-    }
-  } catch (error) {
-    console.error('检查版本更新失败:', error);
-  }
-};
-
-// 更新时间
 const updateTime = () => {
   currentTime.value = dayjs().format("MM月DD日 HH:mm");
 };
 
-// 组件挂载时启动定时器
 onMounted(() => {
-  isClient.value = true; // 标记为客户端
-  updateTime(); // 立即更新一次
-  timer = setInterval(updateTime, 1000); // 每秒更新
-
-  // 检查版本更新
-  checkVersionUpdate();
+  isClient.value = true;
+  updateTime();
+  timer = setInterval(updateTime, 1000);
 });
 
-// 组件卸载时清除定时器
 onUnmounted(() => {
-  if (timer) {
-    clearInterval(timer);
-  }
+  if (timer) clearInterval(timer);
 });
 </script>
-
-<style scoped></style>
