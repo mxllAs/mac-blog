@@ -1,35 +1,36 @@
 <template>
   <div
-    class="w-full h-full px-4 flex items-center justify-between text-white bg-gray-900/20 backdrop-blur-md shadow-sm select-none">
+    class="w-full h-full px-4 flex items-center justify-between text-white bg-gray-900/20 backdrop-blur-md shadow-sm select-none"
+  >
     <div class="flex items-center group">
-      <div class="cursor-pointer group-hover:opacity-80 transition-opacity" @click="open = true">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-          stroke-linecap="round" stroke-linejoin="round">
+      <div class="relative cursor-pointer group-hover:opacity-80 transition-opacity" @click="open = true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 5L9 19M9 5L3 19" />
           <path d="M13 5V19M19 5V19M13 12H19" />
         </svg>
+
+        <div 
+          v-if="notificationState.shouldShow"
+          class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-gray-800 z-10 animate-pulse"
+        ></div>
       </div>
+
       <span class="ml-3 text-xs font-bold hidden sm:block cursor-default tracking-wider">
         XiaoHe Blog
       </span>
     </div>
 
     <div class="flex items-center gap-3 text-sm">
-      <div class="cursor-pointer hover:text-blue-300 transition-colors mr-1" @click="spotlight.open()">
-        <Icon name="ph:magnifying-glass-bold" class="w-5 h-5" />
-      </div>
       <a href="/rss.xml" target="_blank" class="flex items-center justify-center group" title="订阅 RSS">
-        <Icon name="ph:rss-simple-bold" class="w-5 h-5 cursor-pointer hover:text-orange-400 transition-colors" />
+        <Icon name="ph:rss-simple-bold" class="w-4 h-4 cursor-pointer hover:text-orange-400 transition-colors" />
       </a>
-
-      <Icon name="ph:speaker-high-fill" class="w-5 h-5" />
-
-      <Icon name="ph:wifi-high-bold" class="w-5 h-5" />
-
+      <div class="cursor-pointer hover:text-blue-300 transition-colors mr-1" @click="spotlight.open()">
+        <Icon name="ph:magnifying-glass-bold" class="w-4 h-4" />
+      </div>
+      <Icon name="ph:speaker-high-fill" class="w-4 h-4" />
+      <Icon name="ph:wifi-high-bold" class="w-4 h-4" />
       <Icon name="ph:battery-full-fill" class="w-5 h-5" />
-
-      <Icon name="ph:faders-bold" class="w-5 h-5 cursor-pointer hover:text-gray-200" />
-
+      <Icon name="ph:faders-bold" class="w-4 h-4 cursor-pointer hover:text-gray-200" />
       <div class="text-xs font-medium ml-2 tracking-wide min-w-[80px] text-right">
         {{ isClient ? currentTime : "" }}
       </div>
@@ -47,7 +48,12 @@ import { ref, onMounted, onUnmounted } from "vue";
 import MacModal from "./MacModal.vue";
 import BlogInfo from "./BlogInfo.vue";
 import { useSpotlight } from '~/composables/useSpotlight'
+// 🟢 引入状态
+import { useVersionNotification } from '~/composables/useVersionNotification'
+
 const spotlight = useSpotlight()
+const { notificationState } = useVersionNotification()
+
 const isClient = ref(false);
 const currentTime = ref("");
 const open = ref(false);

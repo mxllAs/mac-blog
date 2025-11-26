@@ -1,4 +1,4 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss";
 
 export default {
   content: [
@@ -8,10 +8,12 @@ export default {
     "./plugins/**/*.{js,ts}",
     "./app.vue",
     "./error.vue",
-    "./app/**/*.{js,vue,ts}"
+    "./app/**/*.{js,vue,ts}",
   ],
   theme: {
     extend: {},
   },
-  plugins: [],
-} satisfies Config
+  plugins: [
+    require("@tailwindcss/typography")
+  ],
+} satisfies Config;

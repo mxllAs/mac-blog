@@ -116,6 +116,15 @@ useHead({
 </script>
 
 <style scoped>
+/* 去掉标题链接的所有默认样式，让它看起来就是普通文字 */
+:deep(.prose h1 a),
+:deep(.prose h2 a),
+:deep(.prose h3 a) {
+  color: inherit; /* 颜色跟随标题 */
+  text-decoration: none; /* 去掉下划线 */
+  pointer-events: none; /* 禁止点击 (如果你彻底不想让它点) */
+  cursor: text; /* 鼠标变回文本输入状 */
+}
 /* 针对 Nuxt Content 渲染出的 HTML 进行样式微调，让它更像系统文档 */
 :deep(.prose ul) {
   list-style-type: disc;
