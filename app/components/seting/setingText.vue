@@ -53,21 +53,22 @@ const handleFontChange = async (font) => {
   if (loadingFont.value || isSelected(font)) return;
 
   try {
-    // 2. 如果有 URL (非系统字体) 且浏览器还没加载该字体，显示 loading
-    // document.fonts.check 是一种快速检查字体是否可用的原生 API
-    if (font.url && !document.fonts.check(`12px "${font.value}"`)) {
+    // 2. 【核心修复】只要是有 URL 的字体（非系统默认），就先开启 Loading
+    // 不再去检查 document.fonts.check，因为我们要确保用户看到反馈
+    if (font.url) {
       loadingFont.value = font.value;
     }
 
     // 3. 调用 Store 的动作（内部会处理下载和 FontFace 添加）
+    // 这个 await 会一直等待，直到字体真正下载并解析完成
     await setingStore.updateFont(font);
 
   } catch (e) {
-    // 简单提示一下
     console.error(e);
+    // 简单的错误提示，实际项目中可以用 Toast
     alert("字体下载失败，请检查网络");
   } finally {
-    // 4. 无论成功失败，结束 loading
+    // 4. 无论成功失败（或者是因为缓存秒开），都关闭 Loading
     loadingFont.value = "";
   }
 };
