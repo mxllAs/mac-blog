@@ -12,15 +12,27 @@
 import { useSetingStore } from "~/store/seting.js";
 import Spotlight from '~/components/Spotlight.vue'
 import { useSpotlight } from '~/composables/useSpotlight'
-// 引入 VueUse 核心
-import { onMagicKeys } from '@vueuse/core'
+// ✅ 使用官方推荐的 useMagicKeys，完美解决 SSR 和 报错问题
+import { useMagicKeys } from '@vueuse/core'
 
 const spotlight = useSpotlight()
 const route = useRoute();
 const siteUrl = 'https://www.xiaohev.com';
 const setingStore = useSetingStore();
 
-// --- 1. 字体全局监听 ---
+// --- 1. 快捷键逻辑 (修复版) ---
+// 使用响应式的 useMagicKeys
+const { Meta_K, Ctrl_K } = useMagicKeys()
+
+// 监听组合键按下
+watch([Meta_K, Ctrl_K], ([isMetaK, isCtrlK]) => {
+  if (isMetaK || isCtrlK) {
+    // 切换搜索框显示/隐藏
+    spotlight.toggle()
+  }
+})
+
+// --- 2. 字体全局监听 ---
 // 监听 Store 变化，动态修改 body 样式
 watchEffect(() => {
   if (import.meta.client && setingStore.currentFont.value) {
@@ -28,23 +40,10 @@ watchEffect(() => {
   }
 });
 
-// --- 2. 页面初始化逻辑 (都在 onMounted 里处理) ---
+// --- 3. 页面初始化逻辑 ---
 onMounted(() => {
-  // ESC 键监听 (返回首页)
+  // ESC 键监听 (返回首页或关闭搜索)
   document.addEventListener("keydown", handleKeyDown);
-
-  // ✅ 修复点：Spotlight 快捷键绑定 (Cmd+K / Ctrl+K)
-  // 移入 onMounted 确保只在客户端执行，解决 SSR 报错问题
-  onMagicKeys({
-    meta_k: (e) => {
-      e.preventDefault() // 阻止浏览器默认行为
-      spotlight.toggle()
-    },
-    ctrl_k: (e) => {
-      e.preventDefault()
-      spotlight.toggle()
-    },
-  })
 
   // 字体恢复逻辑：如果用户之前选过特殊字体，刷新后静默加载
   if (import.meta.client) {
@@ -65,16 +64,17 @@ onUnmounted(() => {
 // ESC 键处理函数
 const handleKeyDown = (event) => {
   if (event.key === "Escape") {
-    // 如果搜索框开着，先关搜索框（可选体验优化）
+    // 优先关闭 Spotlight
     if (spotlight.isOpen.value) {
       spotlight.close();
     } else {
+      // 否则返回首页
       navigateTo("/");
     }
   }
 };
 
-// --- 3. 全局 SEO 配置 ---
+// --- 4. 全局 SEO 配置 ---
 useHead({
   titleTemplate: (titleChunk) => {
     return titleChunk ? `${titleChunk} - 小贺的博客` : '小贺的博客 - macOS 风格个人站';

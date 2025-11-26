@@ -16,19 +16,19 @@
 
     <div class="flex items-center gap-3 text-sm">
       <div class="cursor-pointer hover:text-blue-300 transition-colors mr-1" @click="spotlight.open()">
-        <Icon name="ph:magnifying-glass-bold" class="w-4 h-4" />
+        <Icon name="ph:magnifying-glass-bold" class="w-5 h-5" />
       </div>
       <a href="/rss.xml" target="_blank" class="flex items-center justify-center group" title="订阅 RSS">
-        <Icon name="ph:rss-simple-bold" class="w-4 h-4 cursor-pointer hover:text-orange-400 transition-colors" />
+        <Icon name="ph:rss-simple-bold" class="w-5 h-5 cursor-pointer hover:text-orange-400 transition-colors" />
       </a>
 
-      <Icon name="ph:speaker-high-fill" class="w-4 h-4" />
+      <Icon name="ph:speaker-high-fill" class="w-5 h-5" />
 
-      <Icon name="ph:wifi-high-bold" class="w-4 h-4" />
+      <Icon name="ph:wifi-high-bold" class="w-5 h-5" />
 
       <Icon name="ph:battery-full-fill" class="w-5 h-5" />
 
-      <Icon name="ph:faders-bold" class="w-4 h-4 cursor-pointer hover:text-gray-200" />
+      <Icon name="ph:faders-bold" class="w-5 h-5 cursor-pointer hover:text-gray-200" />
 
       <div class="text-xs font-medium ml-2 tracking-wide min-w-[80px] text-right">
         {{ isClient ? currentTime : "" }}
