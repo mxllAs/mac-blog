@@ -9,26 +9,26 @@ export default defineEventHandler(async () => {
 
     // 2. 动态抓取文章路由
     let page = 1;
-    const pageSize = 10;
+    const fetchPageSize = 10; // 抓取时的分页大小 (为了快速获取数据)
+    let totalArticles = 0;    // 🟢 新增：记录总文章数
 
     while (true) {
         try {
-            // 使用 $fetch 请求你的后端接口
-            // 纯 JS 中不需要 <any> 泛型
+            // 请求后端接口
             const response = await $fetch('https://www.xiaohev.com/api/post', {
-                query: { page, pageSize, status: 1 }
+                query: { page, pageSize: fetchPageSize, status: 1 }
             });
 
-            // 兼容数据结构 (根据你之前的调试，数据可能在 data.posts 或直接在 posts)
             const posts = response.data?.posts || response.posts || [];
 
-            // 如果没有数据了，停止循环
             if (!posts || posts.length === 0) {
                 break;
             }
 
-            // 转换格式
-            // 去掉了 (post: any) 中的类型注解
+            // 🟢 累计文章总数
+            totalArticles += posts.length;
+
+            // 添加【文章详情页】URL
             const postRoutes = posts.map((post) => ({
                 loc: `/article/${post.postId}`,
                 lastmod: post.updatedAt || post.createdAt,
@@ -38,18 +38,32 @@ export default defineEventHandler(async () => {
 
             sitemapRoutes.push(...postRoutes);
 
-            // 如果返回的数据少于一页，说明是最后一页了，停止循环
-            if (posts.length < pageSize) {
+            if (posts.length < fetchPageSize) {
                 break;
             }
-
-            // 下一页
             page++;
         } catch (error) {
             console.error('Sitemap dynamic fetch error:', error);
-            // 出错时跳出循环，防止死循环导致构建卡死
             break;
         }
+    }
+
+    // 3. 🟢 新增：添加【文章列表页】分页 URL (/article/list/[page])
+    // 规则：前端列表页每页显示 9 条
+    const listPageSize = 9;
+    // 计算总页数
+    const totalListPages = Math.ceil(totalArticles / listPageSize);
+
+    // 即使没有文章，至少也要收录第 1 页
+    const finalPages = totalListPages > 0 ? totalListPages : 1;
+
+    for (let i = 1; i <= finalPages; i++) {
+        sitemapRoutes.push({
+            loc: `/article/list/${i}`,
+            changefreq: 'daily', // 列表页经常变动(有新文章时)，建议设为 daily
+            priority: 0.8,       // 优先级略低于首页(1.0)和文章详情(0.9)
+            lastmod: new Date().toISOString()
+        });
     }
 
     return sitemapRoutes;

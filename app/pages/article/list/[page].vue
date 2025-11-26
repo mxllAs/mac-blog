@@ -199,6 +199,19 @@ const goToPage = (page) => {
 const closeWindow = () => {
   router.push("/");
 };
+
+// ✅ 修复 TDK 配置
+useHead({
+  // 方案 A：简单点，就叫 "文章列表"
+  // title: '文章列表',
+
+  // 方案 B (推荐)：带上页码，对 SEO 和用户体验更友好
+  title: computed(() => `文章列表 - 第 ${currentPage.value} 页`),
+
+  meta: [
+    { name: 'description', content: `小贺的博客文章列表，当前是第 ${currentPage.value} 页。` }
+  ]
+});
 </script>
 
 <style scoped>

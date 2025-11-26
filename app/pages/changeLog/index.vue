@@ -107,6 +107,12 @@ onMounted(() => {
     updateViewedVersion(latestVersion);
   }
 });
+useHead({
+  title: '更新日志',
+  meta: [
+    { name: 'description', content: '查看小贺博客的版本迭代记录与更新历史。' }
+  ]
+});
 </script>
 
 <style scoped>

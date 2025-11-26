@@ -1,87 +1,107 @@
-// // store/index.js
-// import { useStorage } from "@vueuse/core";
-// import { useRuntimeConfig, useCookie } from "#app";
-// export const useSetingStore = () => {
-//   const config = useRuntimeConfig();
-//   const actionCookie = useCookie("action", {
-//     default: () => config.public.defaultBgImage,
-//   });
-//   const imageStore = useStorage("imageStore", {
-//     action: actionCookie.value,
-//     list: [
-//       "/images/bg1.webp",
-//       "/images/bg2.webp",
-//       "/images/bg3.webp",
-//       "/images/bg4.webp",
-//     ],
-//   });
+import { useCookie, useRuntimeConfig, useState } from "#app";
 
-//   // 更新选中的背景图片的方法
-//   const updateSelectedImage = (imagePath) => {
-//     if (imageStore.value && imagePath) {
-//       imageStore.value.action = imagePath;
-//       actionCookie.value = imagePath;
-//     }
-//   };
-
-//   // 获取当前选中的图片
-//   const getCurrentImage = () => {
-//     return imageStore.value?.action;
-//   };
-
-//   // 获取图片列表
-//   const getImageList = () => {
-//     return imageStore.value?.list || [];
-//   };
-
-//   return {
-//     imageStore,
-//     updateSelectedImage,
-//     getCurrentImage,
-//     getImageList,
-//   };
-// };
-// store/index.js (Composition API 风格)
-
-import { useCookie, useRuntimeConfig } from "#app";
-
-// 这是一个 Composition API 风格的函数 Store
-// 注意：如果你安装了 Pinia 模块，建议使用 defineStore 来避免激活错误
 export const useSetingStore = () => {
-  // 1. 获取配置和默认值
   const config = useRuntimeConfig();
-  // 确保有一个可用的默认值作为回退
-  const DEFAULT_BG_IMAGE = config.public.defaultBgImage;
 
-  // 2. 状态：使用 useCookie 存储当前选中的图片路径
-  // Nuxt 会自动处理 SSR 同步。
-  const selectedImageCookie = useCookie("blog_bg_image", {
-    // 关键：设置默认值。只有当 Cookie 不存在时才使用这个值。
-    // default: () => DEFAULT_BG_IMAGE,
-    // maxAge: 60 * 60 * 24 * 30, // 30 天有效期
-  });
+  // ==============================
+  // 1. 背景图片逻辑 (保持不变)
+  // ==============================
+  const selectedImageCookie = useCookie("blog_bg_image");
 
-  // 3. 静态图片列表 (不需要持久化或 SSR)
   const imageList = [
     "/images/bg1.webp",
-    "/images/bg2.webp", // 使用环境变量默认值
+    "/images/bg2.webp",
     "/images/bg3.webp",
     "/images/bg4.webp",
   ];
 
-  // 4. 动作：更新选中的背景图片
   const updateSelectedImage = (imagePath) => {
-    if (imagePath) {
-      // ✅ 修复：将用户选择的新路径赋值给 Cookie
-      selectedImageCookie.value = imagePath;
+    if (imagePath) selectedImageCookie.value = imagePath;
+  };
+
+  // ==============================
+  // 2. 字体设置逻辑 (新增)
+  // ==============================
+
+  // 定义字体列表
+  const fontList = [
+    {
+      name: "系统默认",
+      // 建议使用 "sans-serif" 而不是空字符串，保证 CSS 语法正确
+      value: "sans-serif",
+      desc: "System Default",
+      url: ""
+    },
+    {
+      name: "方圆体",
+      value: "AlimamaFangYuanTiVF",
+      // 优化描述：突出口感
+      desc: "圆润柔和，温婉灵动",
+      url: "/fonts/AlimamaFangYuanTiVF-Thin.woff2"
+    },
+    {
+      name: "数黑体",
+      value: "AlimamaShuHeiTi",
+      // 优化描述：突出科技感
+      desc: "科技硬朗，清晰干练",
+      url: "/fonts/AlimamaShuHeiTi-Bold.woff2"
+    }
+  ];
+
+  // 当前选中的字体 (持久化存储)
+  const currentFontCookie = useCookie("blog_current_font", {
+    default: () => "sans-serif",
+    maxAge: 60 * 60 * 24 * 365 // 1年
+  });
+
+  // 已加载的字体集合 (内存状态，刷新后重置)
+  const loadedFonts = useState('loaded_fonts_set', () => new Set());
+
+  // 核心动作：切换字体
+  const updateFont = async (font) => {
+    // A. 如果是系统字体，直接切
+    if (!font.url) {
+      currentFontCookie.value = font.value;
+      return;
+    }
+
+    // B. 如果已经下载过，直接切
+    if (loadedFonts.value.has(font.value)) {
+      currentFontCookie.value = font.value;
+      return;
+    }
+
+    // C. 没下载过？开始下载！
+    try {
+      // 1. 创建 FontFace 对象
+      const fontFace = new FontFace(font.value, `url(${font.url})`);
+
+      // 2. 触发下载 (这里是异步的，会等待下载完成)
+      await fontFace.load();
+
+      // 3. 加入到页面文档流
+      document.fonts.add(fontFace);
+
+      // 4. 标记为已下载
+      loadedFonts.value.add(font.value);
+
+      // 5. 切换选中状态
+      currentFontCookie.value = font.value;
+
+    } catch (err) {
+      console.error("字体下载失败:", err);
+      throw err; // 抛出错误让 UI 层捕获
     }
   };
 
-  // 5. 返回响应式状态和方法
   return {
-    // 暴露 useCookie 返回的响应式 Ref
+    // 图片相关
     selectedImage: selectedImageCookie,
     imageList,
     updateSelectedImage,
+    // 字体相关
+    currentFont: currentFontCookie,
+    fontList,
+    updateFont
   };
 };
