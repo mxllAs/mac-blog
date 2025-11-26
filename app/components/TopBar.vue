@@ -15,7 +15,9 @@
     </div>
 
     <div class="flex items-center gap-3 text-sm">
-
+      <div class="cursor-pointer hover:text-blue-300 transition-colors mr-1" @click="spotlight.open()">
+        <Icon name="ph:magnifying-glass-bold" class="w-4 h-4" />
+      </div>
       <a href="/rss.xml" target="_blank" class="flex items-center justify-center group" title="订阅 RSS">
         <Icon name="ph:rss-simple-bold" class="w-4 h-4 cursor-pointer hover:text-orange-400 transition-colors" />
       </a>
@@ -44,7 +46,8 @@ import dayjs from "dayjs";
 import { ref, onMounted, onUnmounted } from "vue";
 import MacModal from "./MacModal.vue";
 import BlogInfo from "./BlogInfo.vue";
-
+import { useSpotlight } from '~/composables/useSpotlight'
+const spotlight = useSpotlight()
 const isClient = ref(false);
 const currentTime = ref("");
 const open = ref(false);
