@@ -3,6 +3,9 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: false },
   css: ["./app/assets/main.css"],
+  devServer: {
+    port: 4399,
+  },
   modules: [
     "@nuxtjs/tailwindcss",
     "@ant-design-vue/nuxt",
@@ -11,7 +14,20 @@ export default defineNuxtConfig({
     "@nuxt/content",
     "@nuxt/icon",
     "@nuxt/image",
+    "@nuxtjs/seo",
   ],
+  site: {
+    url: "https://www.xiaohev.com",
+    name: "小贺的博客",
+    description: "基于 Nuxt 4 构建的沉浸式 Web OS 风格博客，分享技术与生活",
+    defaultLocale: "zh-cn",
+  },
+  sitemap: {
+    // 禁用自动扫描应用路由源(pages, content等)
+    excludeAppSources: true,
+    // 核心修改：直接告诉 sitemap 插件去请求这个内部 API 获取数据
+    sources: ["/api/sitemap-urls"],
+  },
   image: {
     domains: ["xiaohev.com"],
   },
@@ -27,7 +43,7 @@ export default defineNuxtConfig({
       // 1. 本地开发：默认用 http://127.0.0.1:9527，浏览器直接连后端
       // 2. 生产环境(宝塔)：必须在环境变量设置 NUXT_PUBLIC_API_BASE = '/api' (或者你的公网域名)
       // apiBase: "http://127.0.0.1:9527",
-      apiBase: "/api",
+      apiBase: "https://www.xiaohev.com/api",
     },
   },
 });
