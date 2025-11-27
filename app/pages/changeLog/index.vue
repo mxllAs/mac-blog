@@ -67,8 +67,6 @@ import dayjs from "dayjs";
 
 const router = useRouter();
 
-// 版本更新通知
-const { updateViewedVersion } = useVersionNotification();
 
 // 关闭窗口
 const closeWindow = () => {
@@ -100,13 +98,6 @@ const formatDate = (date) => {
   return dayjs(date).format('YYYY-MM-DD');
 };
 
-// 当用户进入日志页面时，记录当前最新版本
-onMounted(() => {
-  if (logs.value && logs.value.length > 0 && logs.value[0].title) {
-    const latestVersion = extractVersion(logs.value[0].title);
-    updateViewedVersion(latestVersion);
-  }
-});
 useHead({
   title: '更新日志',
   meta: [
