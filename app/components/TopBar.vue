@@ -9,10 +9,10 @@
           <path d="M13 5V19M19 5V19M13 12H19" />
         </svg>
 
-        <div 
+        <!-- <div 
           v-if="notificationState.shouldShow"
           class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-gray-800 z-10 animate-pulse"
-        ></div>
+        ></div> -->
       </div>
 
       <span class="ml-3 text-xs font-bold hidden sm:block cursor-default tracking-wider">

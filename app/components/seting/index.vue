@@ -7,42 +7,55 @@
           :key="item.key"
           :class="{ active: activeKey === item.key }"
           @click="handleMenuClick(item)"
-          class="menu-item"
+          class="menu-item flex items-center justify-between"
         >
-          {{ item.label }}
+          <span>{{ item.label }}</span>
+          
+          <div 
+            v-if="item.key === 'setting-update' && notificationState.shouldShow"
+            class="w-2 h-2 bg-red-500 rounded-full animate-pulse"
+          ></div>
         </li>
       </ul>
     </div>
-    <div class="pl-[15px] flex-1 h-[432px] overflow-y-auto overflow-x-hidden">
+
+    <div class="pl-[15px] flex-1 h-[432px] overflow-y-auto overflow-x-hidden relative">
       <transition name="fade" mode="out-in">
-        <component :is="settingContentComponent" :key="activeKey" />
+        <KeepAlive include="SetingUpdate">
+          <component :is="settingContentComponent" :key="activeKey" />
+        </KeepAlive>
       </transition>
     </div>
   </div>
 </template>
+
 <script setup>
 import { reactive, computed } from "vue";
 import SetingImage from "@/components/seting/setingImage.vue";
 import SetingText from "@/components/seting/setingText.vue";
+import SetingUpdate from "@/components/seting/setingUpdate.vue"; // 1. 引入组件
+import { useVersionNotification } from '~/composables/useVersionNotification'; // 2. 引入状态
+
+const { notificationState } = useVersionNotification();
+
 const activeKey = useState("seting-menu-active", () => "setting-bg");
+
 const settingContent = {
   "setting-bg": SetingImage,
   "setting-text": SetingText,
+  "setting-update": SetingUpdate, // 3. 注册组件
 };
+
 const settingContentComponent = computed(() => {
   return settingContent[activeKey.value];
 });
+
 const menu = reactive([
-  {
-    label: "网站背景设置",
-    key: "setting-bg",
-  },
-  {
-    label: "网站文字设置",
-    key: "setting-text",
-  },
+  { label: "网站背景设置", key: "setting-bg" },
+  { label: "网站文字设置", key: "setting-text" },
+  { label: "软件更新", key: "setting-update" }, // 4. 添加菜单项
 ]);
-// a-menu点击事件处理函数
+
 const handleMenuClick = (row) => {
   activeKey.value = row.key;
 };
