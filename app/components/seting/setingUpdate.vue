@@ -135,7 +135,7 @@ const checkUpdate = async () => {
       .first();
     if (latestLog && latestLog.title) {
       const match = latestLog.title.match(/[vV]?(\d+(\.\d+)*)/);
-      const latestVer = match ? match[1] : "";
+      const latestVer = match ? `v${match[1]}` : '';
 
       if (latestVer && latestVer !== currentDisplayVersion.value) {
         hasNewVersion.value = true;
