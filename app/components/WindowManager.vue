@@ -10,7 +10,10 @@
       :drag="true"
       @focus="windowStore.focus(win.id)"
     >
-      <component :is="componentMap[win.component]" />
+      <component
+        :is="componentMap[win.component]"
+        @close="windowStore.close(win.id)"
+      />
     </MacModal>
   </div>
 </template>
