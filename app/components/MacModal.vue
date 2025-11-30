@@ -1,42 +1,23 @@
 <template>
-  <div>
-    <a-modal
-      ref="modalRef"
-      v-model:open="isOpen"
-      :width="width"
-      :closable="false"
-      :body-style="bodyStyle"
-      :mask-style="maskStyle"
-      wrapClassName="mac-modal-wrapper"
-      :maskClosable="false"
-      :destroyOnClose="true"
-      :mask="false" 
-      :zIndex="zIndex"
-    >
+  <div v-if="isOpen">
+    <a-modal v-model:open="isOpen" :width="width" :closable="false" :footer="null" :mask="false" :maskClosable="false"
+      :zIndex="zIndex" wrapClassName="mac-modal-wrapper" :wrap-style="{ pointerEvents: 'none' }"
+      :body-style="{ padding: 0 }">
       <template #title>
-        <div ref="modalTitleRef" class="cursor-default">
-          <WindowTopBar
-            :drag="drag"
-            @close="isOpen = false"
-            @minimize="isOpen = false"
-            @maximize="emit('maximize')"
-          />
+        <div ref="modalTitleRef" class="cursor-default w-full" @mousedown.capture="emit('focus')">
+          <WindowTopBar :drag="drag" @close="isOpen = false" @minimize="isOpen = false" @maximize="emit('maximize')" />
         </div>
       </template>
-      
-      <div class="w-full h-full">
+
+      <div class="w-full h-full pointer-events-auto" @mousedown.capture="emit('focus')">
         <slot></slot>
       </div>
 
       <template #modalRender="{ originVNode }">
-        <div 
-          :style="transformStyle" 
-          @mousedown.capture="emit('focus')" 
-        >
+        <div :style="transformStyle" class="pointer-events-auto">
           <component :is="originVNode" />
         </div>
       </template>
-      <template #footer></template>
     </a-modal>
   </div>
 </template>
@@ -46,7 +27,6 @@ import WindowTopBar from "@/components/topbar/WindowTopBar.vue";
 import { ref, computed, watch, watchEffect, onUnmounted } from "vue";
 import { useDraggable } from "@vueuse/core";
 
-// 🟢 确保 props 里有 zIndex
 const props = defineProps({
   title: { type: String, default: "" },
   width: { type: String, default: "800px" },
@@ -55,14 +35,9 @@ const props = defineProps({
 });
 
 const isOpen = defineModel('open', { type: Boolean, default: false });
-
-// 🟢 确保 emits 里有 focus
 const emit = defineEmits(['focus', 'minimize', 'maximize']);
 
-const bodyStyle = ref({ padding: "0", margin: "0" });
-const maskStyle = ref({ background: "transparent", pointerEvents: "none" });
-
-// --- 拖拽逻辑 (无需修改) ---
+// --- 拖拽逻辑 (保持不变) ---
 const modalTitleRef = ref(null);
 const { x, y, isDragging } = useDraggable(modalTitleRef);
 const startX = ref(0);
@@ -79,15 +54,15 @@ const watchXY = watch([x, y], () => {
     startX.value = x.value;
     startY.value = y.value;
     const bodyRect = document.body.getBoundingClientRect();
-    const titleRect = modalTitleRef.value.getBoundingClientRect();
-    const modalElement = document.querySelector(".mac-modal-wrapper .ant-modal-content");
-    const modalRect = modalElement ? modalElement.getBoundingClientRect() : { height: 400 };
-    dragRect.value.left = 8;
-    dragRect.value.right = bodyRect.width - titleRect.width - 8;
-    dragRect.value.top = 50;
-    dragRect.value.bottom = bodyRect.height - modalRect.height - 90;
-    preTransformX.value = transformX.value;
-    preTransformY.value = transformY.value;
+    if (modalTitleRef.value) {
+      // 简化版边界计算
+      dragRect.value.left = 0;
+      dragRect.value.right = bodyRect.width;
+      dragRect.value.top = 0;
+      dragRect.value.bottom = bodyRect.height;
+      preTransformX.value = transformX.value;
+      preTransformY.value = transformY.value;
+    }
   }
   startedDrag.value = true;
 });
@@ -100,8 +75,8 @@ const watchIsDragging = watch(isDragging, () => {
 
 watchEffect(() => {
   if (startedDrag.value) {
-    transformX.value = preTransformX.value + Math.min(Math.max(dragRect.value.left, x.value), dragRect.value.right) - startX.value;
-    transformY.value = preTransformY.value + Math.min(Math.max(dragRect.value.top, y.value), dragRect.value.bottom) - startY.value;
+    transformX.value = preTransformX.value + (x.value - startX.value);
+    transformY.value = preTransformY.value + (y.value - startY.value);
   }
 });
 
@@ -118,14 +93,32 @@ onUnmounted(() => {
 </script>
 
 <style>
-/* 样式部分非常关键，请确保完全一致 */
-.ant-modal .ant-modal-header { margin: 0 !important; }
-.mac-modal-wrapper .ant-modal-body { padding: 0 !important; margin: 0 !important; }
-.mac-modal-wrapper .ant-modal-content { padding: 0 !important; }
+/* 终极样式覆盖 */
+.mac-modal-wrapper {
+  pointer-events: none !important;
+}
 
-/* 🟢 窗口本身接收点击 */
-.mac-modal-wrapper .ant-modal { transform-origin: center center; transition: none; pointer-events: auto; }
+.mac-modal-wrapper .ant-modal {
+  pointer-events: auto !important;
+  padding-bottom: 0 !important;
+}
 
-/* 🟢 包装器不阻挡点击 (点击穿透) */
-.mac-modal-wrapper { pointer-events: none; }
+.ant-modal .ant-modal-header {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.mac-modal-wrapper .ant-modal-content {
+  padding: 0 !important;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.mac-modal-wrapper .ant-modal-body {
+  padding: 0 !important;
+  margin: 0 !important;
+}
 </style>

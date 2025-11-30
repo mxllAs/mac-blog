@@ -1,7 +1,6 @@
 <template>
   <div
-    class="w-full flex justify-center py-2"
-    style="height: var(--window-height)"
+    class="w-full flex justify-center py-2 h-full"
   >
     <div class="rounded-lg bg-[#fff] shadow-md" :class="`${width}`">
       <!-- 窗口化 -->
