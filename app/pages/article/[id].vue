@@ -1,7 +1,6 @@
 <template>
   <MacWindow @close="closeWindow" scrollbarColor="rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.8)" :bgImg="bgImg">
     <div class="min-h-full bg-white/80">
-      <!-- 错误状态 -->
       <div v-if="error" class="flex items-center justify-center h-96">
         <div class="text-center">
           <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -19,18 +18,13 @@
         </div>
       </div>
 
-      <!-- 文章内容 -->
       <div v-else-if="article" class="max-w-4xl mx-auto p-6 md:p-8 h-full">
-        <!-- 文章头部 -->
         <header class="mb-8">
-          <!-- 标题 -->
           <h1 class="text-4xl font-bold text-gray-800 mb-4 leading-tight">
             {{ article.title }}
           </h1>
 
-          <!-- 文章元信息 -->
           <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-4">
-            <!-- 分类 -->
             <div v-if="article.category" class="flex items-center gap-2">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -42,7 +36,6 @@
               </span>
             </div>
 
-            <!-- 发布时间 -->
             <div class="flex items-center gap-2">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -51,7 +44,6 @@
               <span>{{ formatDate(article.publishedAt) }}</span>
             </div>
 
-            <!-- 阅读量 -->
             <div class="flex items-center gap-2">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -63,7 +55,6 @@
               <span>{{ article.views || 0 }} 次阅读</span>
             </div>
 
-            <!-- 推荐和置顶标签 -->
             <div class="flex gap-2">
               <span v-if="article.isRecommend" class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs">
                 推荐
@@ -74,7 +65,6 @@
             </div>
           </div>
 
-          <!-- 标签 -->
           <div v-if="article.tags && article.tags.length > 0" class="flex flex-wrap gap-2">
             <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -88,20 +78,16 @@
           </div>
         </header>
 
-        <!-- 文章摘要 -->
         <div v-if="article.excerpt" class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-8 rounded-r-lg">
           <p class="text-blue-800 leading-relaxed">{{ article.excerpt }}</p>
         </div>
 
-        <!-- 文章内容 -->
         <article class="prose prose-lg max-w-none">
           <div class="text-gray-700 leading-relaxed whitespace-pre-wrap font-light" v-html="article.content"></div>
         </article>
 
-        <!-- 文章底部信息 -->
         <footer class="mt-12 pt-8 border-t border-gray-200">
           <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <!-- 文章统计 -->
             <div class="text-sm text-gray-500 space-y-1">
               <div>文章编号: #{{ article.postId }}</div>
               <div>创建时间: {{ formatDate(article.createdAt) }}</div>
@@ -111,7 +97,6 @@
         </footer>
       </div>
 
-      <!-- 未找到文章 -->
       <div v-else class="flex items-center justify-center h-96">
         <div class="text-center text-gray-500">
           <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,16 +116,48 @@ import defaultBgImg from "@/assets/images/def-list-img.webp";
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 
+// 🟢 1. 引入 Highlight.js 核心和样式
+import hljs from 'highlight.js';
+// 推荐使用 atom-one-dark 主题，比较符合你的深色代码块风格
+import 'highlight.js/styles/atom-one-dark.css'; 
+
 // 设置dayjs为中文
 dayjs.locale('zh-cn');
 const route = useRoute();
 const router = useRouter();
 const id = route.params.id;
 const bgImg = computed(() => article.value?.cover?.url || defaultBgImg);
+
 // 获取文章数据
 const { data: article, error } = await useAsyncData(`article-${id}`, () =>
   useApi(`/post/${id}`)
 );
+
+// 🟢 2. 定义高亮函数
+const highlightCode = async () => {
+  if (import.meta.client) {
+    // 等待 DOM 更新（v-html 渲染完成）
+    await nextTick();
+    // 查找所有代码块并应用高亮
+    const blocks = document.querySelectorAll('pre code');
+    blocks.forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  }
+};
+
+// 🟢 3. 监听文章数据变化，触发高亮
+watch(article, () => {
+  if (article.value) {
+    highlightCode();
+  }
+}, { immediate: true, flush: 'post' }); // flush: 'post' 确保在 DOM 更新后执行
+
+// 🟢 4. 确保组件挂载时也尝试执行（应对 SSR 水合后的情况）
+onMounted(() => {
+  highlightCode();
+});
+
 // 格式化日期
 const formatDate = (dateString) => {
   if (!dateString) return "";
@@ -323,20 +340,43 @@ useHead(() => {
   font-weight: 500;
 }
 
-/* 代码块样式 */
+/* 🟢 修改：代码块样式 - Mac 终端风格增强 */
 :deep(.prose pre) {
-  background-color: #1f2937;
-  color: #e5e7eb;
+  background-color: #282c34; /* 匹配 atom-one-dark */
+  color: #abb2bf;
   overflow-x: auto;
-  padding: 1.25em 1.5em;
-  border-radius: 0.5em;
+  padding: 3rem 1.5rem 1.5rem 1.5rem; /* 🟢 顶部留出空间给红绿灯 */
+  border-radius: 0.75rem; /* 圆角更大一点 */
   margin-top: 1.5em;
   margin-bottom: 1.5em;
   line-height: 1.7;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+  position: relative; /* 🟢 必须：为伪元素定位 */
 }
 
-:deep(.prose pre code) {
+/* 🟢 核心：用 CSS 伪元素画出红黄绿三个点 */
+:deep(.prose pre)::before {
+  content: "";
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ff5f56; /* 红色圆点 */
+  box-shadow: 
+    20px 0 0 #ffbd2e, /* 黄色圆点 (向右偏移20px) */
+    40px 0 0 #27c93f; /* 绿色圆点 (向右偏移40px) */
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+:deep(.prose pre):hover::before {
+  opacity: 1;
+}
+
+/* 🟢 覆盖 highlight.js 自带的背景色 */
+:deep(.prose pre code.hljs) {
   background-color: transparent;
   color: inherit;
   padding: 0;

@@ -3,16 +3,11 @@
     class="w-full h-full px-4 flex items-center justify-between text-white bg-gray-900/20 backdrop-blur-md shadow-sm select-none"
   >
     <div class="flex items-center group">
-      <div class="relative cursor-pointer group-hover:opacity-80 transition-opacity" @click="open = true">
+      <div class="relative cursor-pointer group-hover:opacity-80 transition-opacity" @click="windowStore.toggle('about')">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 5L9 19M9 5L3 19" />
           <path d="M13 5V19M19 5V19M13 12H19" />
         </svg>
-
-        <!-- <div 
-          v-if="notificationState.shouldShow"
-          class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-gray-800 z-10 animate-pulse"
-        ></div> -->
       </div>
 
       <span class="ml-3 text-xs font-bold hidden sm:block cursor-default tracking-wider">
@@ -37,26 +32,21 @@
     </div>
   </div>
 
-  <MacModal v-model="open" width="320px" :drag="true">
-    <BlogInfo />
-  </MacModal>
-</template>
+  </template>
 
 <script setup>
 import dayjs from "dayjs";
 import { ref, onMounted, onUnmounted } from "vue";
-import MacModal from "./MacModal.vue";
-import BlogInfo from "./BlogInfo.vue";
+// BlogInfo 和 MacModal 不需要在这里引入了
 import { useSpotlight } from '~/composables/useSpotlight'
-// 🟢 引入状态
-import { useVersionNotification } from '~/composables/useVersionNotification'
+import { useWindowStore } from "~/store/window.js"; // 🟢 引入 Store
 
 const spotlight = useSpotlight()
-const { notificationState } = useVersionNotification()
+const windowStore = useWindowStore() // 🟢
 
 const isClient = ref(false);
 const currentTime = ref("");
-const open = ref(false);
+// const open = ref(false); // ❌ 删除
 let timer = null;
 
 const updateTime = () => {

@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   css: ["./app/assets/main.css"],
   devServer: {
-    // port: 4399,
+    port: 4399,
   },
   modules: [
     "@nuxtjs/tailwindcss",
@@ -34,8 +34,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // 私有配置 (仅服务端 Nuxt SSR 可用)
     // 默认指向本地后端，本地开发和生产环境(如果后端在同一台服务器)通常都可以用这个
-    apiBase: "http://127.0.0.1:9527",
-    // apiBase: "https://www.xiaohev.com/api",
+    // apiBase: "http://127.0.0.1:9527",
+    apiBase: "https://www.xiaohev.com/api",
 
     public: {
       version: "0.0.1",
@@ -44,8 +44,8 @@ export default defineNuxtConfig({
       // 1. 本地开发：默认用 http://127.0.0.1:9527，浏览器直接连后端
       // 2. 生产环境(宝塔)：必须在环境变量设置 NUXT_PUBLIC_API_BASE = '/api' (或者你的公网域名)
       // apiBase: "http://127.0.0.1:9527",
-      // apiBase: "https://www.xiaohev.com/api",
-      apiBase: "/api",
+      apiBase: "https://www.xiaohev.com/api",
+      // apiBase: "/api",
     },
   },
 });
