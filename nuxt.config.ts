@@ -35,6 +35,7 @@ export default defineNuxtConfig({
     // 私有配置 (仅服务端 Nuxt SSR 可用)
     // 默认指向本地后端，本地开发和生产环境(如果后端在同一台服务器)通常都可以用这个
     apiBase: "http://127.0.0.1:9527",
+    // apiBase: "https://www.xiaohev.com/api",
 
     public: {
       version: "0.0.1",

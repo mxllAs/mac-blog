@@ -169,7 +169,7 @@ useHead(() => {
       : "文章详情") ||
     "文章详情";
   return {
-    title: `${article.value.title} - 文章详情`,
+    title: `${article.value.title}`,
     meta: [
       { name: "description", content: description },
       { name: "keywords", content: keywords },

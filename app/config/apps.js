@@ -3,7 +3,7 @@
 export const dockApps = [
     {
         id: 'finder',
-        name: 'Finder',
+        name: '首页',
         // 使用自定义 SVG (假设你已经放到了 public/icons/finder.svg)
         icon: '/icons/finder-icon.svg',
         path: '/',
